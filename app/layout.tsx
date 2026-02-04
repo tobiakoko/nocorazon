@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Footer from "./components/Footer";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${oswald.variable} antialiased`}>
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
