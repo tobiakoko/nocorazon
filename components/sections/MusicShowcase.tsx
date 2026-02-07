@@ -1,14 +1,39 @@
 "use client";
 
-import { TRACKS } from "@/lib/constants";
+import { useTracks } from "@/lib/hooks/useTracks";
 import SpotifyEmbed from "@/components/music/SpotifyEmbed";
 import TrackList from "@/components/music/TrackList";
 import ScrollReveal from "@/components/effects/ScrollReveal";
-import { Disc, ExternalLink, Activity } from "lucide-react";
+import { Disc, ExternalLink, Activity, Wifi } from "lucide-react";
 import Image from "next/image";
 
 export default function MusicShowcase() {
-  const latestTrack = TRACKS[0];
+  const { tracks, featuredTrack, isLoading, source } = useTracks();
+
+  // Show loading skeleton while fetching
+  if (isLoading || !featuredTrack) {
+    return (
+      <section className="relative py-20 overflow-hidden">
+        <div className="container mx-auto">
+          <div className="animate-pulse">
+            <div className="h-12 bg-white/5 rounded-lg w-64 mb-12" />
+            <div className="h-[500px] bg-white/5 rounded-[2rem] mb-20" />
+            <div className="grid md:grid-cols-12 gap-10">
+              <div className="md:col-span-4">
+                <div className="h-8 bg-white/5 rounded w-40 mb-4" />
+                <div className="h-20 bg-white/5 rounded" />
+              </div>
+              <div className="md:col-span-8">
+                <div className="h-64 bg-white/5 rounded-2xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const latestTrack = featuredTrack;
 
   return (
     <section className="relative py-20 overflow-hidden">
@@ -21,10 +46,18 @@ export default function MusicShowcase() {
         <ScrollReveal animation="slide-right">
           <div className="flex items-end justify-between mb-12 border-b border-white/10 pb-4">
             <div>
-              <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">
-                SONIC ARCHIVES
-              </h2>
-              <p className="text-brand-pink font-mono text-sm tracking-[0.3em] mt-2 uppercase">
+              <div className="flex items-center gap-3 mb-2">
+                <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50">
+                  SONIC ARCHIVES
+                </h2>
+                {source === 'api' && (
+                  <span className="flex items-center gap-1 text-xs text-green-400/70 bg-green-400/10 px-2 py-1 rounded-full">
+                    <Wifi className="w-3 h-3" />
+                    Live
+                  </span>
+                )}
+              </div>
+              <p className="text-brand-pink font-mono text-sm tracking-[0.3em] uppercase">
                 最新リリース // Latest Audio Data
               </p>
             </div>
@@ -45,8 +78,8 @@ export default function MusicShowcase() {
             {/* The Glass Card */}
             <div className="relative bg-brand-dark/80 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden">
               
-              {/* Background Blur Image for Atmosphere */}
-              <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay">
+              {/* Background Blur Image for Atmosphere - Hidden on mobile for performance */}
+              <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay hidden md:block">
                  <Image
                   src={latestTrack.albumArt}
                   alt="Atmosphere"
@@ -173,7 +206,7 @@ export default function MusicShowcase() {
             <div className="md:col-span-8">
                 <ScrollReveal animation="fade-up" delay={0.2}>
                     <div className="bg-white/5 backdrop-blur-sm border border-white/5 rounded-2xl p-2">
-                        <TrackList tracks={TRACKS} />
+                        <TrackList tracks={tracks} />
                     </div>
                 </ScrollReveal>
             </div>

@@ -1,6 +1,7 @@
 import { Instagram, Twitter, Music, Youtube, Disc, Radio, Users, Activity, Headphones } from 'lucide-react';
 import { SocialLink, StatCardData, DetailedStatData, PlatformAnalytics, MusicAnalytics, Track, Show } from './types';
 import { FaInstagram, FaTwitter, FaTiktok, FaSpotify, FaApple, FaYoutube } from "react-icons/fa";
+import { SiTidal } from "react-icons/si";
 
 export const NAV_SOCIALS = [
   { name: 'Instagram', url: 'https://www.instagram.com/_nocorazon_', icon: FaInstagram },
@@ -12,6 +13,7 @@ export const MUSIC_PLATFORMS: SocialLink[] = [
   { name: 'Spotify', url: 'https://open.spotify.com/artist/3cqyOKTotCB10wu7SZ3YfU?si=c_2ts543QDahSqQbr9xcug', icon: FaSpotify, label: 'Spotify' },
   { name: 'Apple Music', url: 'https://music.apple.com/us/artist/nocorazon/1525131687', icon: FaApple, label: 'Apple Music' },
   { name: 'YouTube', url: 'https://youtube.com/channel/UC_xHrb-luK5oFmGunkkptGw?si=2MaZfHD0fjs4egId', icon: FaYoutube, label: 'YouTube' },
+  { name: 'Tidal', url: 'https://tidal.com/artist/1525131687', icon: SiTidal, label: 'Tidal' },
 ];
 
 export const OVERVIEW_STATS: StatCardData[] = [
@@ -48,6 +50,14 @@ export const INSTAGRAM_METRICS: DetailedStatData[] = [
   { label: 'Engagement', value: '8.2%' }
 ];
 
+// Artist IDs for API calls
+export const ARTIST_IDS = {
+  spotify: '3cqyOKTotCB10wu7SZ3YfU',
+  youtube: 'UC_xHrb-luK5oFmGunkkptGw',
+  appleMusic: '1525131687',
+  tidal: '1525131687',
+} as const;
+
 // Social Platform Analytics
 export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
   {
@@ -59,7 +69,7 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     engagement: 8.2,
     reach: 450000,
     isVerified: true,
-    profileUrl: 'https://instagram.com/nocorazon',
+    profileUrl: 'https://www.instagram.com/_nocorazon_',
   },
   {
     platform: 'tiktok',
@@ -69,7 +79,7 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     followerChange: 15.8,
     engagement: 12.4,
     reach: 890000,
-    profileUrl: 'https://tiktok.com/@nocorazon',
+    profileUrl: 'https://www.tiktok.com/@goat.tingz',
   },
   {
     platform: 'twitter',
@@ -80,7 +90,7 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     engagement: 3.2,
     reach: 85000,
     isVerified: true,
-    profileUrl: 'https://twitter.com/nocorazon',
+    profileUrl: 'https://x.com/betterdayz_',
   },
   {
     platform: 'youtube',
@@ -89,7 +99,7 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     followers: 8500,
     followerChange: 3.2,
     reach: 120000,
-    profileUrl: 'https://youtube.com/@nocorazon',
+    profileUrl: 'https://youtube.com/channel/UC_xHrb-luK5oFmGunkkptGw',
   },
 ];
 
@@ -102,7 +112,7 @@ export const MUSIC_ANALYTICS: MusicAnalytics[] = [
     monthlyListeners: 125400,
     totalStreams: 2100000,
     playlistPlacements: 47,
-    profileUrl: 'https://open.spotify.com/artist/nocorazon',
+    profileUrl: 'https://open.spotify.com/artist/3cqyOKTotCB10wu7SZ3YfU',
   },
   {
     platform: 'appleMusic',
@@ -111,7 +121,7 @@ export const MUSIC_ANALYTICS: MusicAnalytics[] = [
     monthlyListeners: 45200,
     totalStreams: 890000,
     playlistPlacements: 12,
-    profileUrl: 'https://music.apple.com/artist/nocorazon',
+    profileUrl: 'https://music.apple.com/us/artist/nocorazon/1525131687',
   },
   {
     platform: 'youtubeMusic',
@@ -119,7 +129,7 @@ export const MUSIC_ANALYTICS: MusicAnalytics[] = [
     brandColor: '#FF0000',
     monthlyListeners: 32100,
     totalStreams: 450000,
-    profileUrl: 'https://music.youtube.com/channel/nocorazon',
+    profileUrl: 'https://music.youtube.com/channel/UC_xHrb-luK5oFmGunkkptGw',
   },
 ];
 

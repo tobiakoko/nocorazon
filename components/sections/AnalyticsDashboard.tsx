@@ -1,14 +1,15 @@
 "use client";
 
-import { SOCIAL_ANALYTICS, MUSIC_ANALYTICS, formatNumber, getTotalFollowers, getTotalStreams } from "@/lib/constants";
+import { useAnalytics, useTotalFollowers, useTotalStreams } from "@/lib/hooks/useAnalytics";
 import PlatformCard from "@/components/analytics/PlatformCard";
 import StatCounter from "@/components/analytics/StatCounter";
 import ScrollReveal from "@/components/effects/ScrollReveal";
-import { Users, Disc, TrendingUp } from "lucide-react";
+import { Users, Disc, TrendingUp, Wifi } from "lucide-react";
 
 export default function AnalyticsDashboard() {
-  const totalFollowers = getTotalFollowers();
-  const totalStreams = getTotalStreams();
+  const { socialAnalytics, musicAnalytics, isLoading, source } = useAnalytics();
+  const totalFollowers = useTotalFollowers(socialAnalytics);
+  const totalStreams = useTotalStreams(musicAnalytics);
 
   return (
     <section className="relative">
@@ -18,7 +19,15 @@ export default function AnalyticsDashboard() {
       {/* Social Reach Section */}
       <ScrollReveal animation="fade-up">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="section-heading">Social Reach</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="section-heading">Social Reach</h2>
+            {source === 'api' && (
+              <span className="flex items-center gap-1 text-xs text-green-400/70 bg-green-400/10 px-2 py-1 rounded-full">
+                <Wifi className="w-3 h-3" />
+                Live
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-2 text-white/40">
             <Users className="w-4 h-4" />
             <span className="text-sm">
@@ -29,7 +38,7 @@ export default function AnalyticsDashboard() {
       </ScrollReveal>
 
       <ScrollReveal animation="fade-up" stagger={0.1} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-        {SOCIAL_ANALYTICS.map((platform) => (
+        {socialAnalytics.map((platform) => (
           <PlatformCard
             key={platform.platform}
             platform={platform.platform}
@@ -38,6 +47,7 @@ export default function AnalyticsDashboard() {
             followers={platform.followers}
             followerChange={platform.followerChange}
             profileUrl={platform.profileUrl}
+            isLoading={isLoading}
           />
         ))}
       </ScrollReveal>
@@ -45,7 +55,15 @@ export default function AnalyticsDashboard() {
       {/* Music Reach Section */}
       <ScrollReveal animation="fade-up">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="section-heading">Music Reach</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="section-heading">Music Reach</h2>
+            {source === 'api' && (
+              <span className="flex items-center gap-1 text-xs text-green-400/70 bg-green-400/10 px-2 py-1 rounded-full">
+                <Wifi className="w-3 h-3" />
+                Live
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-2 text-white/40">
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm">
@@ -57,7 +75,7 @@ export default function AnalyticsDashboard() {
 
       <ScrollReveal animation="fade-up" stagger={0.15}>
         <div className="grid md:grid-cols-3 gap-4">
-          {MUSIC_ANALYTICS.map((platform) => (
+          {musicAnalytics.map((platform) => (
             <a
               key={platform.platform}
               href={platform.profileUrl}
