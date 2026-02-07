@@ -4,6 +4,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { PlatformAnalytics, MusicAnalytics, AnalyticsApiResponse } from '@/lib/types';
 import { SOCIAL_ANALYTICS, MUSIC_ANALYTICS } from '@/lib/constants';
 
+// Create maps for icons by platform (icons can't be serialized via JSON)
+const socialIconMap = Object.fromEntries(
+  SOCIAL_ANALYTICS.map((p) => [p.platform, p.icon])
+);
+const musicIconMap = Object.fromEntries(
+  MUSIC_ANALYTICS.map((p) => [p.platform, p.icon])
+);
+
 interface UseAnalyticsReturn {
   socialAnalytics: PlatformAnalytics[];
   musicAnalytics: MusicAnalytics[];
@@ -33,8 +41,18 @@ export function useAnalytics(): UseAnalyticsReturn {
 
       const data: AnalyticsApiResponse = await response.json();
 
-      setSocialAnalytics(data.social);
-      setMusicAnalytics(data.music);
+      // Merge API data with icons from constants (icons can't be serialized via JSON)
+      const mergedSocial = data.social.map((platform) => ({
+        ...platform,
+        icon: socialIconMap[platform.platform] || platform.icon,
+      }));
+      const mergedMusic = data.music.map((platform) => ({
+        ...platform,
+        icon: musicIconMap[platform.platform] || platform.icon,
+      }));
+
+      setSocialAnalytics(mergedSocial);
+      setMusicAnalytics(mergedMusic);
       setSource(data.source);
     } catch (err) {
       console.error('Failed to fetch analytics:', err);
