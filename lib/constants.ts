@@ -1,4 +1,4 @@
-import { Instagram, Twitter, Music, Youtube, Disc, Radio, TrendingUp, Users, Activity } from 'lucide-react';
+import { Instagram, Twitter, Music, Youtube, Disc, Radio, Users, Activity } from 'lucide-react';
 import { SocialLink, StatCardData, DetailedStatData } from './types';
 
 export const NAV_SOCIALS: SocialLink[] = [
