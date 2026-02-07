@@ -3,15 +3,15 @@ import { SocialLink, StatCardData, DetailedStatData, PlatformAnalytics, MusicAna
 import { FaInstagram, FaTwitter, FaTiktok, FaSpotify, FaApple, FaYoutube } from "react-icons/fa";
 
 export const NAV_SOCIALS = [
-  { name: 'Instagram', url: '#', icon: FaInstagram },
-  { name: 'TikTok', url: '#', icon: FaTiktok },
-  { name: 'Twitter', url: '#', icon: FaTwitter },
+  { name: 'Instagram', url: 'https://www.instagram.com/_nocorazon_', icon: FaInstagram },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@goat.tingz', icon: FaTiktok },
+  { name: 'Twitter', url: 'https://x.com/betterdayz_', icon: FaTwitter },
 ];
 
 export const MUSIC_PLATFORMS: SocialLink[] = [
-  { name: 'Spotify', url: '#', icon: FaSpotify, label: 'Spotify' },
-  { name: 'Apple Music', url: '#', icon: FaApple, label: 'Apple Music' },
-  { name: 'YouTube', url: '#', icon: FaYoutube, label: 'YouTube' },
+  { name: 'Spotify', url: 'https://open.spotify.com/artist/3cqyOKTotCB10wu7SZ3YfU?si=c_2ts543QDahSqQbr9xcug', icon: FaSpotify, label: 'Spotify' },
+  { name: 'Apple Music', url: 'https://music.apple.com/us/artist/nocorazon/1525131687', icon: FaApple, label: 'Apple Music' },
+  { name: 'YouTube', url: 'https://youtube.com/channel/UC_xHrb-luK5oFmGunkkptGw?si=2MaZfHD0fjs4egId', icon: FaYoutube, label: 'YouTube' },
 ];
 
 export const OVERVIEW_STATS: StatCardData[] = [

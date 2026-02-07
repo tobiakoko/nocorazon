@@ -7,13 +7,13 @@ import Footer from "@/components/Footer";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["300", "400", "600", "800"],
+  weight: ["400", "600", "700"],
 });
 
 const oswald = Oswald({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["500", "700"],
+  weight: ["700"],
 });
 
 export const metadata: Metadata = {

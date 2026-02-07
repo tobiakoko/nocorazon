@@ -6,6 +6,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { throttle } from "@/lib/utils";
 
 // Register GSAP plugins only on client side
 if (typeof window !== "undefined") {
@@ -53,14 +54,14 @@ export default function HeroSection() {
     setParticles(generatedParticles);
   }, []);
 
-  // Setup mouse listener for parallax effect
+  // Setup mouse listener for parallax effect (throttled to ~60fps for performance)
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = throttle((e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = (e.clientY / window.innerHeight) * 2 - 1;
       mouseX.set(x);
       mouseY.set(y);
-    };
+    }, 16);
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
@@ -140,6 +141,7 @@ export default function HeroSection() {
           alt="Neo Tokyo Cyberpunk Background"
           fill
           priority
+          sizes="100vw"
           className="object-cover opacity-60 contrast-125 saturate-150"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-brand-dark/20 to-brand-dark" />
@@ -177,10 +179,11 @@ export default function HeroSection() {
       >
         <div className="relative w-full h-[90vh] md:h-[95vh] max-w-[1400px]">
           <Image
-            src="/nocorazon-crop.png"
+            src="/nocorazon-crop.webp"
             alt="Nocorazon Character"
             fill
             priority
+            sizes="(max-width: 768px) 100vw, 1400px"
             className="object-contain object-bottom drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] filter brightness-50 contrast-125"
           />
         </div>

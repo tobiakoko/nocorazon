@@ -1,10 +1,25 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import SakuraParticles from "@/components/effects/SakuraParticles";
 import HeroSection from "@/components/HeroSection";
-import AnalyticsDashboard from "@/components/sections/AnalyticsDashboard";
-import MusicShowcase from "@/components/sections/MusicShowcase";
-import TourSection from "@/components/sections/TourSection";
-import NewsletterSection from "@/components/NewsletterSection";
+
+// Lazy load below-fold sections for better initial load performance
+const AnalyticsDashboard = dynamic(
+  () => import("@/components/sections/AnalyticsDashboard"),
+  { ssr: true }
+);
+const MusicShowcase = dynamic(
+  () => import("@/components/sections/MusicShowcase"),
+  { ssr: true }
+);
+const TourSection = dynamic(
+  () => import("@/components/sections/TourSection"),
+  { ssr: true }
+);
+const NewsletterSection = dynamic(
+  () => import("@/components/NewsletterSection"),
+  { ssr: true }
+);
 
 export default function Home() {
   return (

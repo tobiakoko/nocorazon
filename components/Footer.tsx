@@ -67,7 +67,7 @@ export default function Footer() {
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-white/30 text-xs font-mono">
                     <MapPin className="w-3 h-3" />
-                    <span>TOKYO / NEW YORK / LOS ANGELES</span>
+                    <span>DALLAS / NEW YORK / LOS ANGELES</span>
                 </div>
             </div>
           </div>
@@ -80,17 +80,17 @@ export default function Footer() {
             <div className="flex flex-col gap-1">
                 <h3 className="font-display font-bold text-2xl tracking-widest text-white">NOCORAZON</h3>
                 <p className="text-[10px] text-white/30 font-mono">
-                    © {currentYear} NOCORAZON MUSIC GROUP. ALL RIGHTS RESERVED.
+                    © {currentYear} NOCORAZON MUSIC. ALL RIGHTS RESERVED.
                 </p>
             </div>
 
             {/* Decorative System Text */}
             <div className="hidden md:flex items-center gap-8">
                 <div className="flex flex-col items-end">
-                    <span className="text-[10px] text-brand-pink/60 font-mono tracking-widest">SYSTEM STATUS</span>
+                    <span className="text-[10px] text-brand-pink/60 font-mono tracking-widest">ARTIST STATUS</span>
                     <span className="text-xs font-bold text-green-500 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        OPERATIONAL
+                        OPEN
                     </span>
                 </div>
                 <div className="h-8 w-[1px] bg-white/10" />
