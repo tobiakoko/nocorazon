@@ -33,6 +33,7 @@ export default function HeroSection() {
 
   // State to hold random values (Solved Hydration Error)
   const [particles, setParticles] = useState<SmokeParticle[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Mouse parallax
   const mouseX = useMotionValue(0);
@@ -40,7 +41,13 @@ export default function HeroSection() {
 
   // Generate random particles on mount (client-side only to avoid hydration mismatch)
   useEffect(() => {
-    const generatedParticles = Array.from({ length: 8 }).map((_, i) => ({
+    // Detect mobile devices
+    const checkMobile = window.innerWidth < 768;
+
+    // Reduce particle count on mobile to prevent crashes
+    const particleCount = checkMobile ? 3 : 8;
+
+    const generatedParticles = Array.from({ length: particleCount }).map((_, i) => ({
       id: i,
       top: `${Math.random() * 60 + 20}%`,
       left: `${Math.random() * 40}%`,
@@ -52,6 +59,7 @@ export default function HeroSection() {
     }));
     // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: client-only initialization to prevent hydration mismatch
     setParticles(generatedParticles);
+    setIsMobile(checkMobile);
   }, []);
 
   // Setup mouse listener for parallax effect (throttled to ~60fps for performance)
@@ -153,12 +161,12 @@ export default function HeroSection() {
         {particles.map((p) => (
           <div
             key={p.id}
-            className="smoke-particle absolute rounded-full mix-blend-screen blur-[80px]"
+            className={`smoke-particle absolute rounded-full mix-blend-screen ${isMobile ? 'blur-xl' : 'blur-[80px]'}`}
             style={{
               top: p.top,
               left: p.left,
-              width: p.width,
-              height: p.height,
+              width: isMobile ? '200px' : p.width,
+              height: isMobile ? '200px' : p.height,
               background: p.background,
               zIndex: p.id,
             }}

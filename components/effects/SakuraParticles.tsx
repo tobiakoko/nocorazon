@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 
 // Seeded pseudo-random number generator for deterministic randomness
 function seededRandom(seed: number) {
@@ -67,19 +67,25 @@ const BACKGROUND_PETALS = generatePetals(12, "background");
 
 export default function SakuraParticles() {
   const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [windIntensity, setWindIntensity] = useState(0);
 
   useEffect(() => {
     setIsClient(true);
+
+    // Detect mobile devices
+    const checkMobile = () => window.innerWidth < 768;
+    setIsMobile(checkMobile());
 
     // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (prefersReducedMotion) return;
+    // Disable animations entirely on mobile or if user prefers reduced motion
+    if (prefersReducedMotion || checkMobile()) return;
 
-    // Periodic wind gusts
+    // Periodic wind gusts (desktop only)
     const windInterval = setInterval(() => {
       setWindIntensity(Math.random() * 30 + 10);
       setTimeout(() => setWindIntensity(0), 2000);
@@ -88,9 +94,14 @@ export default function SakuraParticles() {
     return () => clearInterval(windInterval);
   }, []);
 
-  const allPetals = useMemo(
-    () => [...BACKGROUND_PETALS, ...FOREGROUND_PETALS],
-    []
+  // Reduce particle count on mobile
+  const visibleForegroundPetals = useMemo(
+    () => isMobile ? FOREGROUND_PETALS.slice(0, 6) : FOREGROUND_PETALS,
+    [isMobile]
+  );
+  const visibleBackgroundPetals = useMemo(
+    () => isMobile ? BACKGROUND_PETALS.slice(0, 4) : BACKGROUND_PETALS,
+    [isMobile]
   );
 
   if (!isClient) {
@@ -108,7 +119,7 @@ export default function SakuraParticles() {
           transition: "transform 2s ease-out",
         }}
       >
-        {BACKGROUND_PETALS.map((petal) => (
+        {visibleBackgroundPetals.map((petal) => (
           <div
             key={`bg-${petal.id}`}
             className="absolute"
@@ -119,7 +130,7 @@ export default function SakuraParticles() {
               height: petal.size,
               opacity: petal.opacity,
               animation: `fall ${petal.duration}s linear ${petal.delay}s infinite`,
-              filter: "blur(1px)",
+              filter: isMobile ? "none" : "blur(1px)",
             }}
           >
             <div
@@ -132,7 +143,7 @@ export default function SakuraParticles() {
                 viewBox="0 0 24 24"
                 fill="none"
                 className="w-full h-full"
-                style={{
+                style={isMobile ? undefined : {
                   filter: "drop-shadow(0 0 4px rgba(255, 175, 216, 0.3))",
                 }}
               >
@@ -155,7 +166,7 @@ export default function SakuraParticles() {
           transition: "transform 1.5s ease-out",
         }}
       >
-        {FOREGROUND_PETALS.map((petal) => (
+        {visibleForegroundPetals.map((petal) => (
           <div
             key={`fg-${petal.id}`}
             className="absolute"
@@ -178,7 +189,7 @@ export default function SakuraParticles() {
                 viewBox="0 0 24 24"
                 fill="none"
                 className="w-full h-full"
-                style={{
+                style={isMobile ? undefined : {
                   filter: "drop-shadow(0 0 8px rgba(255, 175, 216, 0.5))",
                 }}
               >
