@@ -1,16 +1,17 @@
 import { Instagram, Twitter, Music, Youtube, Disc, Radio, Users, Activity, Headphones } from 'lucide-react';
 import { SocialLink, StatCardData, DetailedStatData, PlatformAnalytics, MusicAnalytics, Track, Show } from './types';
+import { FaInstagram, FaTwitter, FaTiktok, FaSpotify, FaApple, FaYoutube } from "react-icons/fa";
 
-export const NAV_SOCIALS: SocialLink[] = [
-  { name: 'Instagram', url: '#', icon: Instagram },
-  { name: 'TikTok', url: '#', icon: Music },
-  { name: 'Twitter', url: '#', icon: Twitter },
+export const NAV_SOCIALS = [
+  { name: 'Instagram', url: '#', icon: FaInstagram },
+  { name: 'TikTok', url: '#', icon: FaTiktok },
+  { name: 'Twitter', url: '#', icon: FaTwitter },
 ];
 
 export const MUSIC_PLATFORMS: SocialLink[] = [
-  { name: 'Spotify', url: '#', icon: Disc, label: 'Spotify' },
-  { name: 'Apple Music', url: '#', icon: Radio, label: 'Apple Music' },
-  { name: 'YouTube', url: '#', icon: Youtube, label: 'YouTube' },
+  { name: 'Spotify', url: '#', icon: FaSpotify, label: 'Spotify' },
+  { name: 'Apple Music', url: '#', icon: FaApple, label: 'Apple Music' },
+  { name: 'YouTube', url: '#', icon: FaYoutube, label: 'YouTube' },
 ];
 
 export const OVERVIEW_STATS: StatCardData[] = [
