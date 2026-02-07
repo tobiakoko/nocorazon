@@ -7,13 +7,32 @@
 
   /* Brand colors */
   --color-brand-pink: #ffafd8;
+  --color-brand-pink-dim: #ff7eb8;
+  --color-brand-pink-glow: #ff5fa8;
   --color-brand-dark: #0a0a0a;
+  --color-brand-darker: #050505;
   --color-brand-glass: oklch(100% 0 0 / 0.08);
+  --color-brand-glass-strong: oklch(100% 0 0 / 0.12);
+
+  /* Cinematic accent colors */
+  --color-accent-purple: #b366ff;
+  --color-accent-cyan: #66ffff;
+  --color-accent-gold: #ffd700;
+
+  /* Platform brand colors */
+  --color-instagram: #E4405F;
+  --color-tiktok: #00F2EA;
+  --color-twitter: #1DA1F2;
+  --color-youtube: #FF0000;
+  --color-spotify: #1DB954;
+  --color-apple-music: #FA243C;
 
   /* Animations */
   --animate-float: float 6s ease-in-out infinite;
   --animate-fall: fall 10s linear infinite;
   --animate-sway: sway 4s ease-in-out infinite alternate;
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
+  --animate-wind-gust: wind-gust 8s ease-in-out infinite;
 
   @keyframes float {
     0%, 100% {
@@ -46,6 +65,38 @@
       transform: translateX(20px);
     }
   }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes wind-gust {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(30px);
+    }
+    75% {
+      transform: translateX(-20px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
 }
 
 /* Base styles using @layer */
@@ -73,4 +124,96 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+}
+
+/* Enhanced Glassmorphic Components */
+@layer components {
+  .glass-card {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 175, 216, 0.03) 100%
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(255, 175, 216, 0.25);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.5),
+      0 0 60px rgba(255, 175, 216, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-4px);
+  }
+
+  .glass-card-highlight {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 175, 216, 0.15) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(179, 102, 255, 0.08) 100%
+    );
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255, 175, 216, 0.2);
+  }
+
+  /* Skeleton loading animation */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Cinematic glow effect */
+  .cinematic-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    pointer-events: none;
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  .cinematic-glow-pink {
+    background: radial-gradient(circle, var(--color-brand-pink) 0%, transparent 70%);
+  }
+
+  .cinematic-glow-purple {
+    background: radial-gradient(circle, var(--color-accent-purple) 0%, transparent 70%);
+  }
+
+  .cinematic-glow-cyan {
+    background: radial-gradient(circle, var(--color-accent-cyan) 0%, transparent 70%);
+  }
+
+  /* Section heading style */
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Platform-specific glow */
+  .platform-glow-instagram { box-shadow: 0 0 40px rgba(228, 64, 95, 0.2); }
+  .platform-glow-tiktok { box-shadow: 0 0 40px rgba(0, 242, 234, 0.2); }
+  .platform-glow-twitter { box-shadow: 0 0 40px rgba(29, 161, 242, 0.2); }
+  .platform-glow-youtube { box-shadow: 0 0 40px rgba(255, 0, 0, 0.2); }
+  .platform-glow-spotify { box-shadow: 0 0 40px rgba(29, 185, 84, 0.2); }
 }
