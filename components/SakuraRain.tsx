@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
 interface Petal {
   id: number;
   left: number;
@@ -13,33 +11,32 @@ interface Petal {
   swayDelay: number;
 }
 
+// Pre-generate petals at module level with seeded pseudo-random values
+// Using a simple hash function to get deterministic but varied values
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed * 9999) * 10000;
+  return x - Math.floor(x);
+}
+
 function generatePetals(count: number): Petal[] {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
-    left: Math.random() * 100,
-    animationDelay: Math.random() * 10,
-    animationDuration: 8 + Math.random() * 5,
-    size: 10 + Math.random() * 15,
-    opacity: 0.3 + Math.random() * 0.5,
-    swayDuration: 3 + Math.random() * 2,
-    swayDelay: Math.random() * -5,
+    left: seededRandom(i * 1) * 100,
+    animationDelay: seededRandom(i * 2) * 10,
+    animationDuration: 8 + seededRandom(i * 3) * 5,
+    size: 10 + seededRandom(i * 4) * 15,
+    opacity: 0.3 + seededRandom(i * 5) * 0.5,
+    swayDuration: 3 + seededRandom(i * 6) * 2,
+    swayDelay: seededRandom(i * 7) * -5,
   }));
 }
 
+const PETALS = generatePetals(25);
+
 export default function SakuraRain() {
-  const [petals, setPetals] = useState<Petal[]>([]);
-
-  useEffect(() => {
-    setPetals(generatePetals(25));
-  }, []);
-
-  if (petals.length === 0) {
-    return null;
-  }
-
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {petals.map((petal) => (
+    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+      {PETALS.map((petal) => (
         <div
           key={petal.id}
           className="absolute top-[-20px] animate-fall"
