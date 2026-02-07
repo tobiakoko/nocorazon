@@ -173,7 +173,7 @@ export default function HeroSection() {
           />
         ))}
         {/* Static Base Fog (Safe for Server Render) */}
-        <div className="smoke-particle absolute bottom-[-20%] left-[-20%] w-[150vw] h-[50vh] bg-gradient-to-t from-brand-dark via-brand-dark/90 to-transparent blur-3xl" />
+        <div className="smoke-particle absolute bottom-[-20%] inset-x-0 w-full h-[50vh] bg-gradient-to-t from-brand-dark via-brand-dark/90 to-transparent blur-3xl" />
       </div>
 
       {/* LAYER 2: Character */}

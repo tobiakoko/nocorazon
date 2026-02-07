@@ -23,7 +23,7 @@ const NewsletterSection = dynamic(
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-brand-dark text-white font-sans selection:bg-brand-pink selection:text-black">
+    <div className="min-h-screen bg-brand-dark text-white font-sans selection:bg-brand-pink selection:text-black overflow-x-hidden">
       <SakuraParticles />
       <Navbar />
       <HeroSection />
