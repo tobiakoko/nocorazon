@@ -1,215 +1,220 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
-import { ArrowDown } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "motion/react";
 import Image from "next/image";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(useGSAP);
+// Register GSAP plugins only on client side
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+const HERO_BG = "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2500&auto=format&fit=crop";
+
+// Define the shape of our particle data
+interface SmokeParticle {
+  id: number;
+  top: string;
+  left: string;
+  width: string;
+  height: string;
+  background: string;
+}
 
 export default function HeroSection() {
-  const heroRef = useRef<HTMLElement>(null);
-  const backgroundRef = useRef<HTMLDivElement>(null);
-  const subjectRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const smokeContainerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const characterRef = useRef<HTMLDivElement>(null);
 
-  const prefersReducedMotion = useReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
+  // State to hold random values (Solved Hydration Error)
+  const [particles, setParticles] = useState<SmokeParticle[]>([]);
 
+  // Mouse parallax
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Generate random particles on mount (client-side only to avoid hydration mismatch)
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const generatedParticles = Array.from({ length: 8 }).map((_, i) => ({
+      id: i,
+      top: `${Math.random() * 60 + 20}%`,
+      left: `${Math.random() * 40}%`,
+      width: `${Math.random() * 400 + 400}px`,
+      height: `${Math.random() * 400 + 400}px`,
+      background: i % 2 === 0
+        ? "radial-gradient(circle, rgba(255,100,200,0.2) 0%, rgba(0,0,0,0) 70%)"
+        : "radial-gradient(circle, rgba(100,200,255,0.15) 0%, rgba(0,0,0,0) 70%)",
+    }));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: client-only initialization to prevent hydration mismatch
+    setParticles(generatedParticles);
   }, []);
 
-  // GSAP entrance timeline
-  useGSAP(
-    () => {
-      if (prefersReducedMotion) return;
+  // Setup mouse listener for parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
 
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
 
-      tl.from(backgroundRef.current, {
-        scale: 1.3,
-        duration: 2.5,
+  const { scrollY } = useScroll();
+  const yBg = useTransform(scrollY, [0, 1000], [0, 400]);
+  const yChar = useTransform(scrollY, [0, 1000], [0, 150]);
+  const yText = useTransform(scrollY, [0, 1000], [0, 800]);
+  const opacityText = useTransform(scrollY, [0, 400], [1, 0]);
+
+  useGSAP(() => {
+    if (!smokeContainerRef.current || particles.length === 0) return;
+
+    const smokeElements = gsap.utils.toArray(".smoke-particle") as HTMLElement[];
+
+    // Intro Animation
+    const tl = gsap.timeline();
+    
+    tl.fromTo(
+      smokeElements,
+      { x: -window.innerWidth, opacity: 0, scale: 0.5 },
+      {
+        x: (i) => ((i * 17) % 100) - 50,
+        opacity: (i) => 0.4 + ((i * 13) % 40) / 100,
+        scale: (i) => 2 + ((i * 19) % 20) / 10,
+        duration: 3.5,
+        stagger: 0.1,
         ease: "power2.out",
-      })
-        .from(
-          glowRef.current,
-          {
-            opacity: 0,
-            scale: 0.5,
-            duration: 1.5,
-          },
-          "-=2"
-        )
-        .from(
-          subjectRef.current,
-          {
-            y: 100,
-            opacity: 0,
-            duration: 1.5,
-          },
-          "-=1.8"
-        )
-        .from(
-          titleRef.current,
-          {
-            y: 60,
-            opacity: 0,
-            duration: 1,
-          },
-          "-=1"
-        )
-        .from(
-          subtitleRef.current,
-          {
-            y: 30,
-            opacity: 0,
-            duration: 0.8,
-          },
-          "-=0.6"
-        );
-    },
-    { scope: heroRef }
-  );
+      }
+    )
+    .to(characterRef.current, { filter: "brightness(1) contrast(1.1)", duration: 2 }, "-=2")
+    .fromTo(textRef.current, { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1 }, "-=1");
 
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
+    // Scroll Animation
+    smokeElements.forEach((particle, i) => {
+      gsap.to(particle, {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+        x: (i + 1) * 150,
+        y: -200,
+        rotation: i % 2 === 0 ? 90 : -90,
+        opacity: 0,
+      });
+    });
 
-  // Disable parallax on mobile or if user prefers reduced motion
-  const disableParallax = prefersReducedMotion || isMobile;
+    // Idle Animation
+    smokeElements.forEach((particle, i) => {
+      gsap.to(particle, {
+        y: "+=50",
+        x: "+=30",
+        rotation: "+=10",
+        duration: 8 + ((i * 17) % 50) / 10,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    });
 
-  // Multi-layer parallax transforms
-  const backgroundY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    disableParallax ? ["0%", "0%"] : ["0%", "20%"]
-  );
-  const backgroundScale = useTransform(
-    scrollYProgress,
-    [0, 1],
-    disableParallax ? [1, 1] : [1, 1.1]
-  );
-  const subjectY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    disableParallax ? ["0%", "0%"] : ["0%", "35%"]
-  );
-  const textY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    disableParallax ? ["0%", "0%"] : ["0%", "60%"]
-  );
-  const glowY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    disableParallax ? ["0%", "0%"] : ["0%", "40%"]
-  );
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  }, { scope: containerRef, dependencies: [particles] }); // Re-run GSAP when particles are ready
 
   return (
-    <header
-      ref={heroRef}
-      className="relative h-screen w-full flex flex-col justify-end items-center overflow-hidden"
-    >
-      {/* Layer 1: Background image with parallax */}
-      <motion.div
-        ref={backgroundRef}
-        className="absolute inset-0 z-0"
-        style={{ y: backgroundY, scale: backgroundScale }}
+    <div ref={containerRef} className="relative w-full h-screen overflow-hidden bg-black">
+      
+      {/* LAYER 0: Background */}
+      <motion.div 
+        className="absolute inset-0 z-0 scale-110"
+        style={{ y: yBg, x: useTransform(springX, (x) => x * -20), scale: 1.1 }}
       >
         <Image
-          src="https://picsum.photos/seed/cyberpunk/1920/1080"
-          alt=""
+          src={HERO_BG}
+          alt="Neo Tokyo Cyberpunk Background"
           fill
           priority
-          className="object-cover opacity-50 contrast-125 brightness-50 saturate-75"
+          className="object-cover opacity-60 contrast-125 saturate-150"
         />
-        {/* Cinematic gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/60 via-transparent to-brand-dark" />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/40 via-transparent to-brand-dark/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-brand-dark/20 to-brand-dark" />
+        <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay" />
       </motion.div>
 
-      {/* Layer 2: Cinematic glow behind subject */}
-      <motion.div
-        ref={glowRef}
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 z-5 w-[600px] h-[600px] md:w-[800px] md:h-[800px]"
-        style={{ y: glowY }}
-      >
-        <div className="w-full h-full cinematic-glow cinematic-glow-pink" />
-      </motion.div>
+      {/* LAYER 1: Smoke System */}
+      <div ref={smokeContainerRef} className="absolute inset-0 z-20 pointer-events-none overflow-visible">
+        {particles.map((p) => (
+          <div
+            key={p.id}
+            className="smoke-particle absolute rounded-full mix-blend-screen blur-[80px]"
+            style={{
+              top: p.top,
+              left: p.left,
+              width: p.width,
+              height: p.height,
+              background: p.background,
+              zIndex: p.id,
+            }}
+          />
+        ))}
+        {/* Static Base Fog (Safe for Server Render) */}
+        <div className="smoke-particle absolute bottom-[-20%] left-[-20%] w-[150vw] h-[50vh] bg-gradient-to-t from-brand-dark via-brand-dark/90 to-transparent blur-3xl" />
+      </div>
 
-      {/* Layer 3: Subject image with parallax */}
+      {/* LAYER 2: Character */}
       <motion.div
-        ref={subjectRef}
-        className="absolute inset-0 z-10 flex items-end justify-center pointer-events-none md:motion-safe:transform-gpu"
-        style={{ y: subjectY }}
+        ref={characterRef}
+        className="absolute inset-0 z-10 flex items-end justify-center pointer-events-none"
+        style={{ 
+          y: yChar,
+          x: useTransform(springX, (x) => x * 15),
+        }}
       >
-        <div className="relative w-full h-full max-w-4xl">
+        <div className="relative w-full h-[90vh] md:h-[95vh] max-w-[1400px]">
           <Image
             src="/nocorazon-crop.png"
-            alt="Nocorazon"
+            alt="Nocorazon Character"
             fill
             priority
-            className="object-contain object-bottom drop-shadow-[0_0_60px_rgba(255,175,216,0.3)]"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
+            className="object-contain object-bottom drop-shadow-[0_0_30px_rgba(0,0,0,0.8)] filter brightness-50 contrast-125"
           />
         </div>
       </motion.div>
 
-      {/* Gradient overlay on top of subject */}
-      <div className="absolute inset-0 z-20 bg-gradient-to-t from-brand-dark via-brand-dark/20 to-transparent pointer-events-none" />
-
-      {/* Layer 4: Text content with parallax */}
-      <motion.div
-        className="relative z-30 text-center pb-28 md:pb-32 md:motion-safe:transform-gpu"
-        style={{ y: textY, opacity }}
+      {/* LAYER 3: Overlay Particles & UI */}
+      <motion.div 
+         className="absolute inset-0 z-30 pointer-events-none"
+         style={{ y: useTransform(scrollY, [0, 1000], [0, -1200]) }}
       >
-        <h1
-          ref={titleRef}
-          className="font-display text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter uppercase"
-          style={{
-            textShadow: "0 4px 40px rgba(0,0,0,0.9), 0 0 80px rgba(255,175,216,0.2)",
-          }}
-        >
-          Nocorazon
-        </h1>
-        <p
-          ref={subtitleRef}
-          className="font-sans text-xl md:text-3xl font-light tracking-[0.4em] text-brand-pink mt-3"
-          style={{
-            textShadow: "0 2px 20px rgba(255,175,216,0.5)",
-          }}
-        >
-          ノコラゾン
-        </p>
+         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/50 rounded-full blur-[1px]" />
+         <div className="absolute top-3/4 right-1/4 w-4 h-4 bg-brand-pink/30 rounded-full blur-[2px]" />
+         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,6px_100%] pointer-events-none opacity-20" />
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.button
-        className="absolute bottom-8 z-30 hidden md:flex flex-col items-center gap-2 cursor-pointer group"
-        style={{ opacity }}
-        onClick={() => {
-          window.scrollTo({
-            top: window.innerHeight,
-            behavior: "smooth",
-          });
-        }}
-        aria-label="Scroll down"
+      <motion.div 
+        ref={textRef}
+        className="absolute inset-0 z-40 flex flex-col items-center justify-center pb-20 pointer-events-none mix-blend-plus-lighter"
+        style={{ y: yText, opacity: opacityText }}
       >
-        <span className="text-xs tracking-[0.3em] text-white/40 uppercase group-hover:text-white/60 transition-colors">
-          Scroll
-        </span>
-        <ArrowDown className="w-5 h-5 text-white/40 animate-bounce group-hover:text-brand-pink transition-colors" />
-      </motion.button>
-    </header>
+         <div className="relative group">
+            <h1 className="font-display text-8xl md:text-[10rem] font-bold tracking-tighter text-white uppercase"
+                style={{ textShadow: "4px 4px 0px #ff00ff, -4px -4px 0px #00ffff" }}>
+              Nocorazon
+            </h1>
+            <div className="absolute top-0 left-0 w-full h-full text-8xl md:text-[10rem] font-bold tracking-tighter text-red-500 opacity-50 animate-pulse-fast hidden group-hover:block"
+                 style={{ transform: "translate(4px, -4px)" }}>
+                 Nocorazon
+            </div>
+         </div>
+         <p className="mt-4 font-mono text-sm md:text-xl text-brand-pink tracking-[1em] uppercase bg-black/50 px-4 py-1 backdrop-blur-md border border-brand-pink/30">
+           ノコラゾン // SYSTEM_READY
+         </p>
+      </motion.div>
+    </div>
   );
 }
