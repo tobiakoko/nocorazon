@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import Footer from "./components/Footer";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
