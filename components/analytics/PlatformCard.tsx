@@ -43,7 +43,7 @@ export default function PlatformCard({
       href={profileUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="glass-card p-5 md:p-6 block group cursor-pointer"
+      className="glass-card p-5 md:p-6 block group cursor-pointer relative overflow-hidden"
       style={{
         ["--platform-color" as string]: brandColor,
       }}

@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef, useEffect, ReactNode } from "react";
+import { useRef, ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+// Only register on client side
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -39,40 +42,62 @@ export default function ScrollReveal({
       if (prefersReducedMotion) return;
 
       const elements = stagger
-        ? containerRef.current.children
+        ? Array.from(containerRef.current.children)
         : containerRef.current;
 
-      const getAnimationProps = () => {
+      const getFromProps = () => {
         switch (animation) {
           case "fade-up":
-            return { y: 60, opacity: 0 };
+            return { y: 40, opacity: 0 };
           case "fade-in":
             return { opacity: 0 };
           case "slide-left":
-            return { x: -80, opacity: 0 };
+            return { x: -60, opacity: 0 };
           case "slide-right":
-            return { x: 80, opacity: 0 };
+            return { x: 60, opacity: 0 };
           case "scale":
-            return { scale: 0.8, opacity: 0 };
+            return { scale: 0.9, opacity: 0 };
           default:
-            return { y: 60, opacity: 0 };
+            return { y: 40, opacity: 0 };
         }
       };
 
-      gsap.from(elements, {
-        ...getAnimationProps(),
-        duration,
-        delay,
-        stagger: stagger || 0,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: triggerStart,
-          toggleActions: "play none none none",
-        },
-      });
+      const getToProps = () => {
+        switch (animation) {
+          case "fade-up":
+            return { y: 0, opacity: 1 };
+          case "fade-in":
+            return { opacity: 1 };
+          case "slide-left":
+            return { x: 0, opacity: 1 };
+          case "slide-right":
+            return { x: 0, opacity: 1 };
+          case "scale":
+            return { scale: 1, opacity: 1 };
+          default:
+            return { y: 0, opacity: 1 };
+        }
+      };
+
+      // Use fromTo for more reliable animations
+      gsap.fromTo(
+        elements,
+        getFromProps(),
+        {
+          ...getToProps(),
+          duration,
+          delay,
+          stagger: stagger || 0,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: triggerStart,
+            toggleActions: "play none none none",
+          },
+        }
+      );
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [] }
   );
 
   return (
