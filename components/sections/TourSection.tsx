@@ -83,8 +83,43 @@ export default function TourSection() {
     { scope: timelineRef }
   );
 
+  // Show placeholder when no shows are scheduled
   if (UPCOMING_SHOWS.length === 0) {
-    return null;
+    return (
+      <section className="relative">
+        <div className="absolute -top-20 right-1/4 w-80 h-80 cinematic-glow cinematic-glow-cyan opacity-15" />
+
+        <ScrollReveal animation="fade-up">
+          <div className="flex items-center justify-between mb-10">
+            <h2 className="section-heading">Upcoming Shows</h2>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-up" delay={0.1}>
+          <div className="glass-card p-8 md:p-12 text-center">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
+              <Calendar className="w-8 h-8 text-white/30" />
+            </div>
+            <h3 className="font-display text-xl md:text-2xl font-semibold mb-3">
+              No Shows Scheduled
+            </h3>
+            <p className="text-white/50 max-w-md mx-auto mb-6">
+              Stay tuned for upcoming tour dates and live performances. Follow on social media to be the first to know!
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a
+                href="https://www.instagram.com/_nocorazon_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium transition-colors"
+              >
+                Follow on Instagram
+              </a>
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+    );
   }
 
   return (
