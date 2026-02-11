@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 // Seeded pseudo-random number generator for deterministic randomness
 function seededRandom(seed: number) {
@@ -71,6 +71,7 @@ export default function SakuraParticles() {
   const [windIntensity, setWindIntensity] = useState(0);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: client-side initialization to prevent hydration mismatch
     setIsClient(true);
 
     // Detect mobile devices
