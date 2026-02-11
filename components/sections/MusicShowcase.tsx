@@ -6,6 +6,7 @@ import TrackList from "@/components/music/TrackList";
 import ScrollReveal from "@/components/effects/ScrollReveal";
 import { Disc, ExternalLink, Activity, Wifi } from "lucide-react";
 import Image from "next/image";
+import { ARTIST_IDS } from "@/lib/constants";
 
 export default function MusicShowcase() {
   const { tracks, featuredTrack, isLoading, source } = useTracks();
@@ -149,22 +150,16 @@ export default function MusicShowcase() {
                     </div>
                   </div>
 
-                  {/* Spotify Integration - Styled Custom Container */}
+                  {/* Spotify Integration - Artist Profile Embed */}
                   <div className="bg-black/40 rounded-xl p-1 border border-white/5 shadow-inner">
-                    {latestTrack.spotifyEmbedId ? (
-                      <div className="opacity-90 hover:opacity-100 transition-opacity">
-                        <SpotifyEmbed
-                            trackId={latestTrack.spotifyEmbedId}
-                            height={152} // Compact height for cleaner look
-                            theme="dark"
-                            className="w-full rounded-lg"
-                        />
-                      </div>
-                    ) : (
-                      <div className="h-[152px] flex items-center justify-center bg-white/5 rounded-lg border border-dashed border-white/10">
-                        <p className="text-white/40 font-mono text-xs">AUDIO SOURCE OFFLINE</p>
-                      </div>
-                    )}
+                    <div className="opacity-90 hover:opacity-100 transition-opacity">
+                      <SpotifyEmbed
+                          artistId={ARTIST_IDS.spotify}
+                          height={352}
+                          theme="dark"
+                          className="w-full rounded-lg"
+                      />
+                    </div>
                   </div>
 
                   {/* Action Row */}

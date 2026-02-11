@@ -2,7 +2,7 @@
 
 import { Track } from "@/lib/types";
 import { formatNumber } from "@/lib/constants";
-import { Play, ExternalLink } from "lucide-react";
+import { Play } from "lucide-react";
 import Image from "next/image";
 
 // Platform icons as simple SVG components
