@@ -13,26 +13,29 @@ interface StatCounterProps {
 }
 
 function formatValue(value: number, format: string): string {
+  // Round to avoid flickering decimals during animation
+  const rounded = Math.round(value);
+
   switch (format) {
     case "abbreviated":
-      if (value >= 1000000) {
-        return (value / 1000000).toFixed(1) + "M";
+      if (rounded >= 1000000) {
+        return (rounded / 1000000).toFixed(1) + "M";
       }
-      if (value >= 1000) {
-        return (value / 1000).toFixed(1) + "K";
+      if (rounded >= 1000) {
+        return (rounded / 1000).toFixed(1) + "K";
       }
-      return value.toString();
+      return rounded.toLocaleString();
     case "percentage":
       return value.toFixed(1) + "%";
     default:
-      return value.toLocaleString();
+      return rounded.toLocaleString();
   }
 }
 
 export default function StatCounter({
   value,
   format = "abbreviated",
-  duration = 2000,
+  duration: baseDuration = 2000,
   prefix = "",
   suffix = "",
   className = "",
@@ -49,16 +52,24 @@ export default function StatCounter({
     ).matches;
 
     if (prefersReducedMotion) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: immediately set final value when reduced motion preferred
       setDisplayValue(value);
       return;
     }
+
+    // Adaptive duration: shorter for smaller values, longer for larger
+    // Min 800ms for small values, scales up to baseDuration for large values
+    const adaptiveDuration = Math.max(
+      800,
+      Math.min(baseDuration, Math.log10(Math.max(value, 1) + 1) * 600)
+    );
 
     const startTime = Date.now();
     const startValue = 0;
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min(elapsed / adaptiveDuration, 1);
 
       // Easing function (ease-out cubic)
       const eased = 1 - Math.pow(1 - progress, 3);
@@ -74,7 +85,7 @@ export default function StatCounter({
     };
 
     requestAnimationFrame(animate);
-  }, [isInView, value, duration]);
+  }, [isInView, value, baseDuration]);
 
   return (
     <span ref={ref} className={className}>
