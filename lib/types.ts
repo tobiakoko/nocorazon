@@ -85,6 +85,7 @@ export type ShowStatus = 'on-sale' | 'sold-out' | 'announced' | 'cancelled';
 export interface Show {
   id: string;
   date: string;
+  time?: string;
   venue: string;
   city: string;
   country: string;

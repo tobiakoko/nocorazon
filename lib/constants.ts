@@ -194,7 +194,19 @@ export const TRACKS: Track[] = [
 
 // Upcoming Shows
 export const UPCOMING_SHOWS: Show[] = [
-  
+  {
+    id: 'trap-mania-sxsw-2026',
+    date: '2026-03-14',
+    time: '8:00 PM – 2:00 AM',
+    venue: 'Gnar Bar',
+    city: 'Austin, TX',
+    country: 'United States',
+    countryCode: 'US',
+    status: 'on-sale',
+    isHeadliner: false,
+    festivalName: '4th Annual Trap Mania (SXSW)',
+    imageUrl: '/Nocorazon .PNG',
+  },
 ];
 
 // Helper function to format numbers

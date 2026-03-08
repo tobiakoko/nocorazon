@@ -4,7 +4,8 @@ import { useRef } from "react";
 import { UPCOMING_SHOWS } from "@/lib/constants";
 import { Show } from "@/lib/types";
 import ScrollReveal from "@/components/effects/ScrollReveal";
-import { Calendar, MapPin, Ticket, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, Ticket, ExternalLink, Clock } from "lucide-react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -176,49 +177,80 @@ export default function TourSection() {
                   </div>
 
                   {/* Show card */}
-                  <div className="flex-1 glass-card p-4 md:p-5">
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        {/* Venue */}
-                        <h3 className="font-display text-lg md:text-xl font-semibold mb-1 truncate">
-                          {show.venue}
-                        </h3>
-
-                        {/* Location */}
-                        <div className="flex items-center gap-1.5 text-white/60 text-sm mb-3">
-                          <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                          <span>
-                            {show.city}, {show.country}
-                          </span>
-                          {show.festivalName && (
-                            <span className="text-brand-pink ml-2">
-                              @ {show.festivalName}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Status badge */}
-                        <div
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${statusStyles.bg} ${statusStyles.text} ${statusStyles.border}`}
-                        >
-                          {statusStyles.label}
-                        </div>
+                  <div className="flex-1 glass-card overflow-hidden">
+                    <div className="flex">
+                    {/* Flyer image */}
+                    {show.imageUrl && (
+                      <div className="relative w-36 md:w-52 flex-shrink-0 bg-black">
+                        <Image
+                          src={show.imageUrl}
+                          alt={show.festivalName ?? show.venue}
+                          fill
+                          className="object-contain"
+                        />
                       </div>
+                    )}
 
-                      {/* Action button */}
-                      {show.status === "on-sale" && show.ticketUrl && (
-                        <a
-                          href={show.ticketUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 bg-brand-pink/20 hover:bg-brand-pink/30 border border-brand-pink/30 rounded-lg text-brand-pink text-sm font-medium transition-colors group/btn"
-                        >
-                          <Ticket className="w-4 h-4" />
-                          <span>Tickets</span>
-                          <ExternalLink className="w-3 h-3 opacity-0 -ml-1 group-hover/btn:opacity-100 group-hover/btn:ml-0 transition-all" />
-                        </a>
-                      )}
+                    <div className="flex-1 p-4 md:p-5">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          {/* Venue */}
+                          <h3 className="font-display text-lg md:text-xl font-semibold mb-1 truncate">
+                            {show.venue}
+                          </h3>
+
+                          {/* Location */}
+                          <div className="flex items-center gap-1.5 text-white/60 text-sm mb-1.5">
+                            <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                            <span>
+                              {show.city}, {show.country}
+                            </span>
+                            {show.festivalName && (
+                              <span className="text-brand-pink ml-2">
+                                @ {show.festivalName}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Time */}
+                          {show.time && (
+                            <div className="flex items-center gap-1.5 text-white/60 text-sm mb-3">
+                              <Clock className="w-3.5 h-3.5 flex-shrink-0" />
+                              <span>{show.time}</span>
+                            </div>
+                          )}
+
+                          {/* Status badge */}
+                          <div
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${statusStyles.bg} ${statusStyles.text} ${statusStyles.border}`}
+                          >
+                            {statusStyles.label}
+                          </div>
+                        </div>
+
+                        {/* Action button */}
+                        {show.status === "on-sale" && (
+                          show.ticketUrl ? (
+                            <a
+                              href={show.ticketUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 px-4 py-2 bg-brand-pink/20 hover:bg-brand-pink/30 border border-brand-pink/30 rounded-lg text-brand-pink text-sm font-medium transition-colors group/btn"
+                            >
+                              <Ticket className="w-4 h-4" />
+                              <span>Tickets</span>
+                              <ExternalLink className="w-3 h-3 opacity-0 -ml-1 group-hover/btn:opacity-100 group-hover/btn:ml-0 transition-all" />
+                            </a>
+                          ) : (
+                            <div className="flex items-center gap-2 px-4 py-2 bg-brand-pink/10 border border-brand-pink/20 rounded-lg text-brand-pink text-sm font-medium">
+                              <Ticket className="w-4 h-4" />
+                              <span>At the Door</span>
+                            </div>
+                          )
+                        )}
+                      </div>
                     </div>
+                    </div>{/* end flex row */}
                   </div>
                 </div>
               </ScrollReveal>
