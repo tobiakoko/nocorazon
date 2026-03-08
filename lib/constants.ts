@@ -44,7 +44,7 @@ export const OVERVIEW_STATS: StatCardData[] = [
 ];
 
 export const INSTAGRAM_METRICS: DetailedStatData[] = [
-  { label: 'Followers', value: '420', change: '+5.2%', isPositive: true },
+  { label: 'Followers', value: '1,048', change: '+5.2%', isPositive: true },
   { label: 'Avg Likes', value: '85', change: '+3.1%', isPositive: true },
   { label: 'Reach', value: '1.2K' },
   { label: 'Engagement', value: '12.4%' }
@@ -64,7 +64,7 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     platform: 'instagram',
     icon: Instagram,
     brandColor: '#E4405F',
-    followers: 420,
+    followers: 1048,
     followerChange: 5.2,
     engagement: 12.4,
     reach: 1200,
