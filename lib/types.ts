@@ -20,7 +20,6 @@ export interface PlatformAnalytics {
   icon: LucideIcon;
   brandColor: string;
   followers: number;
-  followerChange: number;
   engagement?: number;
   reach?: number;
   isVerified?: boolean;
@@ -32,8 +31,6 @@ export interface MusicAnalytics {
   icon: LucideIcon;
   brandColor: string;
   monthlyListeners: number;
-  totalStreams: number;
-  playlistPlacements?: number;
   profileUrl: string;
 }
 

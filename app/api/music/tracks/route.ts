@@ -7,12 +7,12 @@ import { Track, TracksApiResponse, SpotifyTrack } from '@/lib/types';
 export const dynamic = 'force-dynamic';
 
 // Transform Spotify track to our Track format
-function transformSpotifyTrack(spotifyTrack: SpotifyTrack, index: number): Track {
+function transformSpotifyTrack(spotifyTrack: SpotifyTrack): Track {
   // Get the largest album art available
   const albumArt =
     spotifyTrack.album.images[0]?.url ||
     spotifyTrack.album.images[1]?.url ||
-    'https://picsum.photos/seed/album/400/400';
+    '/nocorazon-crop.webp';
 
   return {
     id: spotifyTrack.id,
@@ -20,9 +20,9 @@ function transformSpotifyTrack(spotifyTrack: SpotifyTrack, index: number): Track
     duration: Math.round(spotifyTrack.duration_ms / 1000),
     albumArt,
     releaseDate: spotifyTrack.album.release_date,
-    // Spotify doesn't expose stream counts via API, use popularity as proxy
-    // Popularity is 0-100, we'll scale it for display purposes
-    streams: spotifyTrack.popularity * 10000 + (10 - index) * 50000,
+    // Spotify doesn't expose stream counts; popularity (0-100) is kept only
+    // for ranking and is never displayed as a play count
+    streams: spotifyTrack.popularity,
     spotifyUrl: spotifyTrack.external_urls.spotify,
     spotifyEmbedId: spotifyTrack.id,
   };

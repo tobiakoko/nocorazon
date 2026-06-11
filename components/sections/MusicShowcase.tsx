@@ -4,38 +4,18 @@ import { useTracks } from "@/lib/hooks/useTracks";
 import SpotifyEmbed from "@/components/music/SpotifyEmbed";
 import TrackList from "@/components/music/TrackList";
 import ScrollReveal from "@/components/effects/ScrollReveal";
-import { Disc, ExternalLink, Activity, Wifi } from "lucide-react";
+import { Disc, ExternalLink, Wifi } from "lucide-react";
 import Image from "next/image";
 import { ARTIST_IDS } from "@/lib/constants";
 
 export default function MusicShowcase() {
-  const { tracks, featuredTrack, isLoading, source } = useTracks();
+  const { tracks, featuredTrack, source } = useTracks();
 
-  // Show loading skeleton while fetching
-  if (isLoading || !featuredTrack) {
-    return (
-      <section className="relative py-20 overflow-hidden">
-        <div className="container mx-auto">
-          <div className="animate-pulse">
-            <div className="h-12 bg-white/5 rounded-lg w-64 mb-12" />
-            <div className="h-[500px] bg-white/5 rounded-[2rem] mb-20" />
-            <div className="grid md:grid-cols-12 gap-10">
-              <div className="md:col-span-4">
-                <div className="h-8 bg-white/5 rounded w-40 mb-4" />
-                <div className="h-20 bg-white/5 rounded" />
-              </div>
-              <div className="md:col-span-8">
-                <div className="h-64 bg-white/5 rounded-2xl" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // Fallback data is always available, so this only guards the type
+  if (!featuredTrack) return null;
 
   return (
-    <section className="relative py-20 overflow-hidden">
+    <section id="music" className="relative py-20 overflow-hidden">
       {/* Background Decor: A subtle grid to give it structure */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
@@ -59,10 +39,6 @@ export default function MusicShowcase() {
               <p className="text-brand-pink font-mono text-sm tracking-[0.3em] uppercase">
                 最新リリース // Latest Audio Data
               </p>
-            </div>
-            <div className="hidden md:flex items-center gap-2 text-brand-pink/50 animate-pulse-slow">
-              <Activity className="w-4 h-4" />
-              <span className="text-xs font-mono">SYSTEM: ONLINE</span>
             </div>
           </div>
         </ScrollReveal>
@@ -117,7 +93,7 @@ export default function MusicShowcase() {
                   <div className="space-y-4 mb-8">
                     <div className="flex justify-between items-start">
                         <span className="font-mono text-brand-pink text-xs tracking-[0.2em] border border-brand-pink/30 px-2 py-1 rounded">
-                          01 // SINGLE
+                          SINGLE
                         </span>
                         <Disc className="text-white/20 w-8 h-8 animate-[spin_10s_linear_infinite]" />
                     </div>
@@ -131,20 +107,6 @@ export default function MusicShowcase() {
                           {featuredTrack.titleJapanese}
                         </p>
                       )}
-                    </div>
-                    
-                    <div className="flex gap-4 pt-2">
-                         <div className="h-1 flex-1 bg-white/5 rounded-full overflow-hidden flex items-center gap-1">
-                            {/* Decorative Fake Visualizer Bars */}
-                            {[...Array(20)].map((_, i) => (
-                                <div key={i}
-                                    className="h-full w-full bg-brand-pink/40"
-                                    style={{
-                                        animation: `pulse-height 1s infinite ${(i * 0.05).toFixed(2)}s`
-                                    }}
-                                />
-                            ))}
-                         </div>
                     </div>
                   </div>
 

@@ -28,43 +28,9 @@
   --color-apple-music: #FA243C;
 
   /* Animations */
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-fall: fall 10s linear infinite;
-  --animate-sway: sway 4s ease-in-out infinite alternate;
   --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
-  --animate-wind-gust: wind-gust 8s ease-in-out infinite;
-
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  @keyframes fall {
-    0% {
-      transform: translateY(-10vh) rotate(0deg);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.8;
-    }
-    100% {
-      transform: translateY(110vh) rotate(360deg);
-      opacity: 0;
-    }
-  }
-
-  @keyframes sway {
-    0% {
-      transform: translateX(-20px);
-    }
-    100% {
-      transform: translateX(20px);
-    }
-  }
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-pulse-fast: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   @keyframes glow-pulse {
     0%, 100% {
@@ -77,25 +43,35 @@
     }
   }
 
-  @keyframes wind-gust {
-    0%, 100% {
-      transform: translateX(0);
-    }
-    25% {
-      transform: translateX(30px);
-    }
-    75% {
-      transform: translateX(-20px);
-    }
-  }
+}
 
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
+/* Vertical text (used for decorative Japanese copy) */
+@utility writing-vertical-rl {
+  writing-mode: vertical-rl;
+}
+
+/* Keyframes referenced from inline styles (SakuraParticles) — defined outside
+   @theme so Tailwind always emits them; it can't detect inline-style usage */
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sway {
+  0% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(20px);
   }
 }
 
@@ -104,6 +80,17 @@
   body {
     background-color: #050505;
     color: white;
+  }
+
+  /* Smooth in-page anchor scrolling, offset for the fixed navbar */
+  html {
+    scroll-padding-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   /* Custom Scrollbar */
@@ -144,7 +131,9 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .glass-card:hover {
+  /* Hover lift only on interactive cards — non-clickable cards shouldn't
+     signal interactivity */
+  :where(a, button).glass-card:hover {
     border-color: rgba(255, 175, 216, 0.25);
     box-shadow:
       0 12px 40px rgba(0, 0, 0, 0.5),
@@ -163,18 +152,6 @@
     backdrop-filter: blur(24px) saturate(200%);
     -webkit-backdrop-filter: blur(24px) saturate(200%);
     border: 1px solid rgba(255, 175, 216, 0.2);
-  }
-
-  /* Skeleton loading animation */
-  .skeleton {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      rgba(255, 255, 255, 0.1) 50%,
-      rgba(255, 255, 255, 0.05) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
   }
 
   /* Cinematic glow effect */
@@ -199,20 +176,20 @@
     background: radial-gradient(circle, var(--color-accent-cyan) 0%, transparent 70%);
   }
 
-  /* Section heading style */
+  /* Section heading style — sized as a real heading so sections outrank
+     the card titles inside them */
   .section-heading {
     font-family: var(--font-display);
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.9);
   }
 
-  /* Platform-specific glow */
-  .platform-glow-instagram { box-shadow: 0 0 40px rgba(228, 64, 95, 0.2); }
-  .platform-glow-tiktok { box-shadow: 0 0 40px rgba(0, 242, 234, 0.2); }
-  .platform-glow-twitter { box-shadow: 0 0 40px rgba(29, 161, 242, 0.2); }
-  .platform-glow-youtube { box-shadow: 0 0 40px rgba(255, 0, 0, 0.2); }
-  .platform-glow-spotify { box-shadow: 0 0 40px rgba(29, 185, 84, 0.2); }
+  @media (min-width: 768px) {
+    .section-heading {
+      font-size: 1.875rem;
+    }
+  }
 }

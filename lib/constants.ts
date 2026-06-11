@@ -9,6 +9,14 @@ export const NAV_SOCIALS = [
   { name: 'Twitter', url: 'https://x.com/betterdayz_', icon: FaTwitter },
 ];
 
+// In-page section navigation
+export const NAV_LINKS = [
+  { label: 'Music', href: '#music' },
+  { label: 'Shows', href: '#shows' },
+  { label: 'Stats', href: '#stats' },
+  { label: 'Connect', href: '#connect' },
+];
+
 export const MUSIC_PLATFORMS: SocialLink[] = [
   { name: 'Spotify', url: 'https://open.spotify.com/artist/3cqyOKTotCB10wu7SZ3YfU?si=c_2ts543QDahSqQbr9xcug', icon: FaSpotify, label: 'Spotify' },
   { name: 'Apple Music', url: 'https://music.apple.com/us/artist/nocorazon/1525131687', icon: FaApple, label: 'Apple Music' },
@@ -31,7 +39,6 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     icon: Instagram,
     brandColor: '#E4405F',
     followers: 1048,
-    followerChange: 5.2,
     engagement: 12.4,
     reach: 1200,
     isVerified: false,
@@ -42,7 +49,6 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     icon: Music,
     brandColor: '#00F2EA',
     followers: 580,
-    followerChange: 8.5,
     engagement: 15.2,
     reach: 4500,
     profileUrl: 'https://www.tiktok.com/@goat.tingz',
@@ -52,7 +58,6 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     icon: Twitter,
     brandColor: '#1DA1F2',
     followers: 125,
-    followerChange: 2.1,
     engagement: 4.8,
     reach: 850,
     isVerified: false,
@@ -63,7 +68,6 @@ export const SOCIAL_ANALYTICS: PlatformAnalytics[] = [
     icon: Youtube,
     brandColor: '#FF0000',
     followers: 89,
-    followerChange: 4.7,
     reach: 2100,
     profileUrl: 'https://youtube.com/channel/UC_xHrb-luK5oFmGunkkptGw',
   },
@@ -76,8 +80,6 @@ export const MUSIC_ANALYTICS: MusicAnalytics[] = [
     icon: Disc,
     brandColor: '#1DB954',
     monthlyListeners: 46,
-    totalStreams: 8500,
-    playlistPlacements: 3,
     profileUrl: 'https://open.spotify.com/artist/3cqyOKTotCB10wu7SZ3YfU',
   },
   {
@@ -85,8 +87,6 @@ export const MUSIC_ANALYTICS: MusicAnalytics[] = [
     icon: Radio,
     brandColor: '#FA243C',
     monthlyListeners: 28,
-    totalStreams: 4200,
-    playlistPlacements: 1,
     profileUrl: 'https://music.apple.com/us/artist/nocorazon/1525131687',
   },
   {
@@ -94,7 +94,6 @@ export const MUSIC_ANALYTICS: MusicAnalytics[] = [
     icon: Headphones,
     brandColor: '#FF0000',
     monthlyListeners: 15,
-    totalStreams: 1800,
     profileUrl: 'https://music.youtube.com/channel/UC_xHrb-luK5oFmGunkkptGw',
   },
 ];

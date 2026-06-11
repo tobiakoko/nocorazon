@@ -68,25 +68,33 @@ const BACKGROUND_PETALS = generatePetals(12, "background");
 export default function SakuraParticles() {
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const [windIntensity, setWindIntensity] = useState(0);
 
+  // Track viewport and motion preference (responds to resize/changes)
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: client-side initialization to prevent hydration mismatch
     setIsClient(true);
 
-    // Detect mobile devices
-    const checkMobile = () => window.innerWidth < 768;
-    setIsMobile(checkMobile());
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => {
+      setIsMobile(mobileQuery.matches);
+      setReducedMotion(motionQuery.matches);
+    };
+    apply();
+    mobileQuery.addEventListener("change", apply);
+    motionQuery.addEventListener("change", apply);
+    return () => {
+      mobileQuery.removeEventListener("change", apply);
+      motionQuery.removeEventListener("change", apply);
+    };
+  }, []);
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+  // Periodic wind gusts (desktop only)
+  useEffect(() => {
+    if (reducedMotion || isMobile) return;
 
-    // Disable animations entirely on mobile or if user prefers reduced motion
-    if (prefersReducedMotion || checkMobile()) return;
-
-    // Periodic wind gusts (desktop only)
     let gustTimeout: ReturnType<typeof setTimeout>;
     const windInterval = setInterval(() => {
       setWindIntensity(Math.random() * 30 + 10);
@@ -97,7 +105,7 @@ export default function SakuraParticles() {
       clearInterval(windInterval);
       clearTimeout(gustTimeout);
     };
-  }, []);
+  }, [reducedMotion, isMobile]);
 
   // Reduce particle count on mobile
   const visibleForegroundPetals = useMemo(
@@ -109,7 +117,9 @@ export default function SakuraParticles() {
     [isMobile]
   );
 
-  if (!isClient) {
+  // Petals are pure decoration — render nothing under reduced motion
+  // (the CSS fall animation would otherwise run regardless)
+  if (!isClient || reducedMotion) {
     return null;
   }
 
@@ -162,9 +172,9 @@ export default function SakuraParticles() {
         ))}
       </div>
 
-      {/* Foreground layer */}
+      {/* Foreground layer — below the navbar (z-50) and mobile menu (z-40) */}
       <div
-        className="fixed inset-0 z-50 pointer-events-none overflow-hidden"
+        className="fixed inset-0 z-30 pointer-events-none overflow-hidden"
         aria-hidden="true"
         style={{
           transform: `translateX(${windIntensity}px)`,

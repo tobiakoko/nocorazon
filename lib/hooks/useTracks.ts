@@ -20,6 +20,12 @@ interface UseTracksReturn {
 export function useTracks(): UseTracksReturn {
   const { data: tracks, ...rest } = useApiData('/api/music/tracks', TRACKS, selectTracks);
 
-  // Featured track is the first one (most popular/recent)
-  return { tracks, featuredTrack: tracks[0] ?? null, ...rest };
+  // Featured track is the most recent release (the UI labels it "new")
+  const featuredTrack = tracks.reduce<Track | null>(
+    (latest, track) =>
+      !latest || track.releaseDate > latest.releaseDate ? track : latest,
+    null
+  );
+
+  return { tracks, featuredTrack, ...rest };
 }
