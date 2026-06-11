@@ -91,6 +91,7 @@ export interface Show {
   country: string;
   countryCode: string;
   ticketUrl?: string;
+  price?: string;
   status: ShowStatus;
   isHeadliner: boolean;
   festivalName?: string;

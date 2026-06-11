@@ -192,8 +192,8 @@ export const TRACKS: Track[] = [
   },
 ];
 
-// Upcoming Shows
-export const UPCOMING_SHOWS: Show[] = [
+// All shows (past and upcoming) — upcoming/past lists are derived automatically by date
+export const SHOWS: Show[] = [
   {
     id: 'trap-mania-sxsw-2026',
     date: '2026-03-14',
@@ -207,7 +207,39 @@ export const UPCOMING_SHOWS: Show[] = [
     festivalName: '4th Annual Trap Mania (SXSW)',
     imageUrl: '/Nocorazon .PNG',
   },
+  {
+    id: 'the-big-show-vol-9',
+    date: '2026-06-13',
+    time: '7:00 PM',
+    venue: '2919 Canton St.',
+    city: 'Dallas, TX',
+    country: 'United States',
+    countryCode: 'US',
+    price: '$20',
+    status: 'on-sale',
+    isHeadliner: false,
+    festivalName: 'The Big Show Vol. 9',
+    imageUrl: '/the-big-show-vol-9.png',
+  },
 ];
+
+// A show counts as upcoming through the end of its show date
+function isUpcoming(show: Show, now: Date = new Date()): boolean {
+  const endOfShowDay = new Date(`${show.date}T23:59:59`);
+  return endOfShowDay >= now;
+}
+
+export function getUpcomingShows(now: Date = new Date()): Show[] {
+  return SHOWS
+    .filter((show) => isUpcoming(show, now))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export function getPastShows(now: Date = new Date()): Show[] {
+  return SHOWS
+    .filter((show) => !isUpcoming(show, now))
+    .sort((a, b) => b.date.localeCompare(a.date));
+}
 
 // Helper function to format numbers
 export function formatNumber(num: number): string {
