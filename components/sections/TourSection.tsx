@@ -91,7 +91,7 @@ export default function TourSection() {
   );
 
   return (
-    <section className="relative">
+    <section id="shows" className="relative">
       {/* Decorative glow */}
       <div className="absolute -top-20 right-1/4 w-80 h-80 cinematic-glow cinematic-glow-cyan opacity-15" />
 
@@ -99,7 +99,7 @@ export default function TourSection() {
         <div className="flex items-center justify-between mb-10">
           <h2 className="section-heading">Upcoming Shows</h2>
           {upcomingShows.length > 0 && (
-            <div className="flex items-center gap-2 text-white/40">
+            <div className="flex items-center gap-2 text-white/60">
               <Calendar className="w-4 h-4" />
               <span className="text-sm">
                 {upcomingShows.length} {upcomingShows.length === 1 ? "show" : "shows"}
@@ -114,7 +114,7 @@ export default function TourSection() {
         <ScrollReveal animation="fade-up" delay={0.1}>
           <div className="glass-card p-8 md:p-12 text-center">
             <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
-              <Calendar className="w-8 h-8 text-white/30" />
+              <Calendar className="w-8 h-8 text-white/50" />
             </div>
             <h3 className="font-display text-xl md:text-2xl font-semibold mb-3">
               No Shows Scheduled
@@ -137,8 +137,9 @@ export default function TourSection() {
       ) : (
         /* Timeline */
         <div ref={timelineRef} className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-[60px] md:left-[80px] top-0 bottom-0 w-px bg-white/10">
+          {/* Vertical line — positioned at the dot centers (date column + gap
+              + half dot width) */}
+          <div className="absolute left-[76px] md:left-[104px] -translate-x-1/2 top-0 bottom-0 w-px bg-white/10">
             <div
               ref={lineRef}
               className="absolute inset-0 bg-gradient-to-b from-brand-pink via-accent-purple to-accent-cyan"
@@ -160,11 +161,11 @@ export default function TourSection() {
                   <div className="flex gap-4 md:gap-6 group">
                     {/* Date column */}
                     <div className="w-[52px] md:w-[72px] flex-shrink-0 text-right">
-                      <div className="text-xs text-white/40">{month}</div>
+                      <div className="text-xs text-white/60">{month}</div>
                       <div className="text-2xl md:text-3xl font-display font-bold">
                         {day}
                       </div>
-                      <div className="text-xs text-white/40">{year}</div>
+                      <div className="text-xs text-white/60">{year}</div>
                     </div>
 
                     {/* Timeline dot */}
@@ -239,9 +240,11 @@ export default function TourSection() {
                                 <ExternalLink className="w-3 h-3 opacity-0 -ml-1 group-hover/btn:opacity-100 group-hover/btn:ml-0 transition-all" />
                               </a>
                             ) : (
-                              <div className="flex items-center gap-2 px-4 py-2 bg-brand-pink/10 border border-brand-pink/20 rounded-lg text-brand-pink text-sm font-medium">
-                                <Ticket className="w-4 h-4" />
-                                <span>{show.price ? `${show.price} at the Door` : "At the Door"}</span>
+                              /* Plain info text, deliberately not styled like
+                                 the Tickets button — it isn't clickable */
+                              <div className="flex items-center gap-2 text-white/70 text-sm">
+                                <Ticket className="w-4 h-4 text-white/50" />
+                                <span>{show.price ? `${show.price} at the door` : "Tickets at the door"}</span>
                               </div>
                             )
                           )}
@@ -263,7 +266,7 @@ export default function TourSection() {
           <ScrollReveal animation="fade-up">
             <div className="flex items-center justify-between mb-10">
               <h2 className="section-heading">Past Shows</h2>
-              <div className="flex items-center gap-2 text-white/40">
+              <div className="flex items-center gap-2 text-white/60">
                 <History className="w-4 h-4" />
                 <span className="text-sm">
                   {pastShows.length} {pastShows.length === 1 ? "show" : "shows"}
@@ -278,9 +281,9 @@ export default function TourSection() {
 
               return (
                 <ScrollReveal key={show.id} animation="fade-up" delay={index * 0.1}>
-                  <div className="glass-card overflow-hidden h-full opacity-80 hover:opacity-100 transition-opacity">
+                  <div className="glass-card overflow-hidden h-full">
                     {show.imageUrl && (
-                      <div className="relative aspect-[4/5] bg-black grayscale hover:grayscale-0 transition-all duration-500">
+                      <div className="relative aspect-[4/5] bg-black">
                         <Image
                           src={show.imageUrl}
                           alt={show.festivalName ?? show.venue}
@@ -290,7 +293,7 @@ export default function TourSection() {
                       </div>
                     )}
                     <div className="p-4 md:p-5">
-                      <div className="text-xs text-white/40 mb-1">
+                      <div className="text-xs text-white/60 mb-1">
                         {month} {day}, {year}
                       </div>
                       <h3 className="font-display text-lg font-semibold mb-1 truncate">

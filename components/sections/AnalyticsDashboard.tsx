@@ -4,15 +4,15 @@ import { useAnalytics } from "@/lib/hooks/useAnalytics";
 import PlatformCard from "@/components/analytics/PlatformCard";
 import StatCounter from "@/components/analytics/StatCounter";
 import ScrollReveal from "@/components/effects/ScrollReveal";
-import { Users, Disc, TrendingUp, Wifi } from "lucide-react";
+import { Users, TrendingUp, Wifi } from "lucide-react";
 
 export default function AnalyticsDashboard() {
-  const { socialAnalytics, musicAnalytics, isLoading, source } = useAnalytics();
+  const { socialAnalytics, musicAnalytics, source } = useAnalytics();
   const totalFollowers = socialAnalytics.reduce((sum, p) => sum + p.followers, 0);
-  const totalStreams = musicAnalytics.reduce((sum, p) => sum + p.totalStreams, 0);
+  const totalListeners = musicAnalytics.reduce((sum, p) => sum + p.monthlyListeners, 0);
 
   return (
-    <section className="relative">
+    <section id="stats" className="relative">
       {/* Decorative glow */}
       <div className="absolute -top-40 left-1/4 w-96 h-96 cinematic-glow cinematic-glow-purple opacity-20" />
 
@@ -28,7 +28,7 @@ export default function AnalyticsDashboard() {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-2 text-white/40">
+          <div className="flex items-center gap-2 text-white/60">
             <Users className="w-4 h-4" />
             <span className="text-sm">
               <StatCounter value={totalFollowers} format="abbreviated" /> total
@@ -45,9 +45,7 @@ export default function AnalyticsDashboard() {
             icon={platform.icon}
             brandColor={platform.brandColor}
             followers={platform.followers}
-            followerChange={platform.followerChange}
             profileUrl={platform.profileUrl}
-            isLoading={isLoading}
           />
         ))}
       </ScrollReveal>
@@ -64,10 +62,10 @@ export default function AnalyticsDashboard() {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-2 text-white/40">
+          <div className="flex items-center gap-2 text-white/60">
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm">
-              <StatCounter value={totalStreams} format="abbreviated" /> streams
+              <StatCounter value={totalListeners} format="abbreviated" /> monthly listeners
             </span>
           </div>
         </div>
@@ -116,44 +114,15 @@ export default function AnalyticsDashboard() {
                 </div>
 
                 {/* Stats */}
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
-                      Monthly Listeners
-                    </p>
-                    <StatCounter
-                      value={platform.monthlyListeners}
-                      format="abbreviated"
-                      className="text-2xl font-display font-bold"
-                    />
-                  </div>
-
-                  <div className="flex gap-6">
-                    <div>
-                      <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
-                        Total Streams
-                      </p>
-                      <StatCounter
-                        value={platform.totalStreams}
-                        format="abbreviated"
-                        className="text-lg font-semibold text-white/80"
-                      />
-                    </div>
-
-                    {platform.playlistPlacements && (
-                      <div>
-                        <p className="text-xs text-white/40 uppercase tracking-wider mb-1">
-                          Playlists
-                        </p>
-                        <div className="flex items-center gap-1">
-                          <Disc className="w-4 h-4 text-white/60" />
-                          <span className="text-lg font-semibold text-white/80">
-                            {platform.playlistPlacements}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                <div>
+                  <p className="text-xs text-white/60 uppercase tracking-wider mb-1">
+                    Monthly Listeners
+                  </p>
+                  <StatCounter
+                    value={platform.monthlyListeners}
+                    format="abbreviated"
+                    className="text-2xl font-display font-bold"
+                  />
                 </div>
               </div>
             </a>

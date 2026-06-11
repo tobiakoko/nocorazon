@@ -4,22 +4,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "picsum.photos",
-      },
-      {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
+        hostname: 'images.unsplash.com', // Hero background
       },
       {
         protocol: 'https',
         hostname: 'i.scdn.co', // Spotify CDN for album art
-      },
-      {
-        protocol: 'https',
-        hostname: 'i.ytimg.com', // YouTube thumbnails
       },
     ],
   },
