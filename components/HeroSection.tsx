@@ -80,7 +80,10 @@ export default function HeroSection() {
   const yBg = useTransform(scrollY, [0, 1000], [0, 400]);
   const yChar = useTransform(scrollY, [0, 1000], [0, 150]);
   const yText = useTransform(scrollY, [0, 1000], [0, 800]);
+  const yOverlay = useTransform(scrollY, [0, 1000], [0, -1200]);
   const opacityText = useTransform(scrollY, [0, 400], [1, 0]);
+  const xBg = useTransform(springX, (x) => x * -20);
+  const xChar = useTransform(springX, (x) => x * 15);
 
   useGSAP(() => {
     if (!smokeContainerRef.current || particles.length === 0) return;
@@ -142,7 +145,7 @@ export default function HeroSection() {
       {/* LAYER 0: Background */}
       <motion.div 
         className="absolute inset-0 z-0 scale-110"
-        style={{ y: yBg, x: useTransform(springX, (x) => x * -20), scale: 1.1 }}
+        style={{ y: yBg, x: xBg, scale: 1.1 }}
       >
         <Image
           src={HERO_BG}
@@ -180,10 +183,7 @@ export default function HeroSection() {
       <motion.div
         ref={characterRef}
         className="absolute inset-0 z-10 flex items-end justify-center pointer-events-none"
-        style={{ 
-          y: yChar,
-          x: useTransform(springX, (x) => x * 15),
-        }}
+        style={{ y: yChar, x: xChar }}
       >
         <div className="relative w-full h-[90vh] md:h-[95vh] max-w-[1400px]">
           <Image
@@ -200,7 +200,7 @@ export default function HeroSection() {
       {/* LAYER 3: Overlay Particles & UI */}
       <motion.div 
          className="absolute inset-0 z-30 pointer-events-none"
-         style={{ y: useTransform(scrollY, [0, 1000], [0, -1200]) }}
+         style={{ y: yOverlay }}
       >
          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/50 rounded-full blur-[1px]" />
          <div className="absolute top-3/4 right-1/4 w-4 h-4 bg-brand-pink/30 rounded-full blur-[2px]" />

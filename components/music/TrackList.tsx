@@ -1,7 +1,7 @@
 "use client";
 
 import { Track } from "@/lib/types";
-import { formatNumber } from "@/lib/constants";
+import { formatNumber } from "@/lib/utils";
 import { Play } from "lucide-react";
 import Image from "next/image";
 

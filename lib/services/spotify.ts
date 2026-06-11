@@ -14,7 +14,7 @@ interface SpotifyTokenResponse {
 }
 
 // Get Spotify access token using Client Credentials flow
-export async function getSpotifyToken(): Promise<string> {
+async function getSpotifyToken(): Promise<string> {
   const cacheKey = 'spotify_token';
   const cached = getFromCache<string>(cacheKey);
 
@@ -87,30 +87,6 @@ export async function getTopTracks(
 
   const data: SpotifyTopTracksResponse = await response.json();
   return data.tracks;
-}
-
-// Fetch artist's albums
-export async function getArtistAlbums(
-  artistId: string = SPOTIFY_ARTIST_ID,
-  limit: number = 10
-): Promise<SpotifyTrack['album'][]> {
-  const token = await getSpotifyToken();
-
-  const response = await fetch(
-    `${SPOTIFY_API_BASE}/artists/${artistId}/albums?include_groups=album,single&limit=${limit}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch albums: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return data.items;
 }
 
 // Check if Spotify credentials are configured

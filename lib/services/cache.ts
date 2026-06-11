@@ -1,9 +1,10 @@
 // Simple in-memory cache with TTL support
 
+import { DataSource } from '@/lib/types';
+
 interface CacheEntry<T> {
   data: T;
   expiresAt: number;
-  createdAt: number;
 }
 
 const cache = new Map<string, CacheEntry<unknown>>();
@@ -32,34 +33,13 @@ export function getFromCache<T>(key: string): T | null {
 }
 
 export function setCache<T>(key: string, data: T, ttl: number): void {
-  const entry: CacheEntry<T> = {
-    data,
-    expiresAt: Date.now() + ttl,
-    createdAt: Date.now(),
-  };
-
-  cache.set(key, entry);
-}
-
-export function invalidateCache(key: string): void {
-  cache.delete(key);
-}
-
-export function clearCache(): void {
-  cache.clear();
+  cache.set(key, { data, expiresAt: Date.now() + ttl });
 }
 
 // Get stale data even if expired (for stale-while-revalidate pattern)
-export function getStaleFromCache<T>(key: string): T | null {
+function getStaleFromCache<T>(key: string): T | null {
   const entry = cache.get(key) as CacheEntry<T> | undefined;
   return entry?.data ?? null;
-}
-
-// Check if cache entry is stale but still exists
-export function isCacheStale(key: string): boolean {
-  const entry = cache.get(key);
-  if (!entry) return true;
-  return Date.now() > entry.expiresAt;
 }
 
 // Wrapper for fetch-with-fallback pattern
@@ -68,7 +48,7 @@ export async function fetchWithCache<T>(
   fetcher: () => Promise<T>,
   ttl: number,
   fallbackData?: T
-): Promise<{ data: T; source: 'cache' | 'api' | 'fallback'; isStale: boolean }> {
+): Promise<{ data: T; source: DataSource; isStale: boolean }> {
   // Try fresh cache first
   const cached = getFromCache<T>(key);
   if (cached !== null) {

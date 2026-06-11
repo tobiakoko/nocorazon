@@ -13,7 +13,9 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 function formatDate(dateString: string): { month: string; day: string; year: string } {
-  const date = new Date(dateString);
+  // Parse as local time — a bare date string would parse as UTC midnight and
+  // display the previous day for users west of UTC
+  const date = new Date(`${dateString}T00:00:00`);
   return {
     month: date.toLocaleDateString("en-US", { month: "short" }).toUpperCase(),
     day: date.getDate().toString().padStart(2, "0"),

@@ -1,5 +1,5 @@
-import { Instagram, Twitter, Music, Youtube, Disc, Radio, Users, Activity, Headphones } from 'lucide-react';
-import { SocialLink, StatCardData, DetailedStatData, PlatformAnalytics, MusicAnalytics, Track, Show } from './types';
+import { Instagram, Twitter, Music, Youtube, Disc, Radio, Headphones } from 'lucide-react';
+import { SocialLink, PlatformAnalytics, MusicAnalytics, Track, Show } from './types';
 import { FaInstagram, FaTwitter, FaTiktok, FaSpotify, FaApple, FaYoutube } from "react-icons/fa";
 import { SiTidal } from "react-icons/si";
 
@@ -14,40 +14,6 @@ export const MUSIC_PLATFORMS: SocialLink[] = [
   { name: 'Apple Music', url: 'https://music.apple.com/us/artist/nocorazon/1525131687', icon: FaApple, label: 'Apple Music' },
   { name: 'YouTube', url: 'https://youtube.com/channel/UC_xHrb-luK5oFmGunkkptGw?si=2MaZfHD0fjs4egId', icon: FaYoutube, label: 'YouTube' },
   { name: 'Tidal', url: 'https://tidal.com/artist/1525131687', icon: SiTidal, label: 'Tidal' },
-];
-
-export const OVERVIEW_STATS: StatCardData[] = [
-  {
-    id: '1',
-    title: 'Biggest Platform',
-    value: 'TikTok',
-    subtext: 'By follower count',
-    icon: Instagram,
-    accentColor: 'text-pink-500'
-  },
-  {
-    id: '2',
-    title: 'Total Fans',
-    value: '1.2K',
-    subtext: 'Across all platforms',
-    icon: Users,
-    accentColor: 'text-rose-400'
-  },
-  {
-    id: '3',
-    title: 'Total Est. Impressions',
-    value: '15K',
-    subtext: 'Across all platforms',
-    icon: Activity,
-    accentColor: 'text-cyan-400'
-  }
-];
-
-export const INSTAGRAM_METRICS: DetailedStatData[] = [
-  { label: 'Followers', value: '1,048', change: '+5.2%', isPositive: true },
-  { label: 'Avg Likes', value: '85', change: '+3.1%', isPositive: true },
-  { label: 'Reach', value: '1.2K' },
-  { label: 'Engagement', value: '12.4%' }
 ];
 
 // Artist IDs for API calls
@@ -205,7 +171,7 @@ export const SHOWS: Show[] = [
     status: 'on-sale',
     isHeadliner: false,
     festivalName: '4th Annual Trap Mania (SXSW)',
-    imageUrl: '/Nocorazon .PNG',
+    imageUrl: '/trap-mania-sxsw-2026.png',
   },
   {
     id: 'the-big-show-vol-9',
@@ -239,25 +205,4 @@ export function getPastShows(now: Date = new Date()): Show[] {
   return SHOWS
     .filter((show) => !isUpcoming(show, now))
     .sort((a, b) => b.date.localeCompare(a.date));
-}
-
-// Helper function to format numbers
-export function formatNumber(num: number): string {
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + 'M';
-  }
-  if (num >= 1000) {
-    return (num / 1000).toFixed(1) + 'K';
-  }
-  return num.toString();
-}
-
-// Helper to get total social followers
-export function getTotalFollowers(): number {
-  return SOCIAL_ANALYTICS.reduce((acc, platform) => acc + platform.followers, 0);
-}
-
-// Helper to get total streams
-export function getTotalStreams(): number {
-  return MUSIC_ANALYTICS.reduce((acc, platform) => acc + platform.totalStreams, 0);
 }
