@@ -43,29 +43,6 @@
     }
   }
 
-  @keyframes fall {
-    0% {
-      transform: translateY(-10vh) rotate(0deg);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.8;
-    }
-    100% {
-      transform: translateY(110vh) rotate(360deg);
-      opacity: 0;
-    }
-  }
-
-  @keyframes sway {
-    0% {
-      transform: translateX(-20px);
-    }
-    100% {
-      transform: translateX(20px);
-    }
-  }
-
   @keyframes glow-pulse {
     0%, 100% {
       opacity: 0.4;
@@ -96,6 +73,31 @@
     100% {
       background-position: 200% 0;
     }
+  }
+}
+
+/* Keyframes referenced from inline styles (SakuraParticles) — defined outside
+   @theme so Tailwind always emits them; it can't detect inline-style usage */
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sway {
+  0% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(20px);
   }
 }
 
