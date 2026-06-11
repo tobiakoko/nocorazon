@@ -48,6 +48,9 @@ export default function NewsletterSection() {
           >
             <input
               type="email"
+              name="email"
+              required
+              aria-label="Email address"
               placeholder="Email Address"
               className="flex-grow bg-white/5 border border-white/10 rounded-lg px-5 py-3.5 text-sm focus:outline-none focus:border-brand-pink/50 focus:bg-white/10 transition-all placeholder:text-white/30"
             />

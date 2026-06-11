@@ -51,7 +51,7 @@ export default function Footer() {
             <div>
                 <h4 className="font-mono text-brand-pink text-xs tracking-[0.2em] uppercase mb-4">Management & Booking</h4>
                 <a
-                  href="mailto:booking@nocorazonmusic.com"
+                  href="mailto:booking@nocorazon.com"
                   className="group flex items-center gap-3 bg-white/5 border border-white/10 p-4 hover:bg-white/10 transition-colors"
                 >
                   <div className="p-2 bg-brand-pink/10 rounded-full">

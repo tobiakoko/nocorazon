@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "motion/react";
+import { formatNumber } from "@/lib/utils";
 
 interface StatCounterProps {
   value: number;
@@ -18,13 +19,7 @@ function formatValue(value: number, format: string): string {
 
   switch (format) {
     case "abbreviated":
-      if (rounded >= 1000000) {
-        return (rounded / 1000000).toFixed(1) + "M";
-      }
-      if (rounded >= 1000) {
-        return (rounded / 1000).toFixed(1) + "K";
-      }
-      return rounded.toLocaleString();
+      return formatNumber(rounded);
     case "percentage":
       return value.toFixed(1) + "%";
     default:
@@ -65,7 +60,7 @@ export default function StatCounter({
     );
 
     const startTime = Date.now();
-    const startValue = 0;
+    let frame: number;
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -73,18 +68,18 @@ export default function StatCounter({
 
       // Easing function (ease-out cubic)
       const eased = 1 - Math.pow(1 - progress, 3);
-      const current = startValue + (value - startValue) * eased;
 
-      setDisplayValue(current);
+      setDisplayValue(value * eased);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        frame = requestAnimationFrame(animate);
       } else {
         setDisplayValue(value);
       }
     };
 
-    requestAnimationFrame(animate);
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
   }, [isInView, value, baseDuration]);
 
   return (

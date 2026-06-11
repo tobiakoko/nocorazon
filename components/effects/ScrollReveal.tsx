@@ -10,9 +10,19 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+type RevealAnimation = "fade-up" | "fade-in" | "slide-left" | "slide-right" | "scale";
+
+const ANIMATIONS: Record<RevealAnimation, { from: gsap.TweenVars; to: gsap.TweenVars }> = {
+  "fade-up": { from: { y: 40, opacity: 0 }, to: { y: 0, opacity: 1 } },
+  "fade-in": { from: { opacity: 0 }, to: { opacity: 1 } },
+  "slide-left": { from: { x: -60, opacity: 0 }, to: { x: 0, opacity: 1 } },
+  "slide-right": { from: { x: 60, opacity: 0 }, to: { x: 0, opacity: 1 } },
+  scale: { from: { scale: 0.9, opacity: 0 }, to: { scale: 1, opacity: 1 } },
+};
+
 interface ScrollRevealProps {
   children: ReactNode;
-  animation?: "fade-up" | "fade-in" | "slide-left" | "slide-right" | "scale";
+  animation?: RevealAnimation;
   delay?: number;
   duration?: number;
   stagger?: number;
@@ -45,46 +55,14 @@ export default function ScrollReveal({
         ? Array.from(containerRef.current.children)
         : containerRef.current;
 
-      const getFromProps = () => {
-        switch (animation) {
-          case "fade-up":
-            return { y: 40, opacity: 0 };
-          case "fade-in":
-            return { opacity: 0 };
-          case "slide-left":
-            return { x: -60, opacity: 0 };
-          case "slide-right":
-            return { x: 60, opacity: 0 };
-          case "scale":
-            return { scale: 0.9, opacity: 0 };
-          default:
-            return { y: 40, opacity: 0 };
-        }
-      };
-
-      const getToProps = () => {
-        switch (animation) {
-          case "fade-up":
-            return { y: 0, opacity: 1 };
-          case "fade-in":
-            return { opacity: 1 };
-          case "slide-left":
-            return { x: 0, opacity: 1 };
-          case "slide-right":
-            return { x: 0, opacity: 1 };
-          case "scale":
-            return { scale: 1, opacity: 1 };
-          default:
-            return { y: 0, opacity: 1 };
-        }
-      };
+      const { from, to } = ANIMATIONS[animation];
 
       // Use fromTo for more reliable animations
       gsap.fromTo(
         elements,
-        getFromProps(),
+        from,
         {
-          ...getToProps(),
+          ...to,
           duration,
           delay,
           stagger: stagger || 0,

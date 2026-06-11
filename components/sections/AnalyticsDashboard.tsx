@@ -1,6 +1,6 @@
 "use client";
 
-import { useAnalytics, useTotalFollowers, useTotalStreams } from "@/lib/hooks/useAnalytics";
+import { useAnalytics } from "@/lib/hooks/useAnalytics";
 import PlatformCard from "@/components/analytics/PlatformCard";
 import StatCounter from "@/components/analytics/StatCounter";
 import ScrollReveal from "@/components/effects/ScrollReveal";
@@ -8,8 +8,8 @@ import { Users, Disc, TrendingUp, Wifi } from "lucide-react";
 
 export default function AnalyticsDashboard() {
   const { socialAnalytics, musicAnalytics, isLoading, source } = useAnalytics();
-  const totalFollowers = useTotalFollowers(socialAnalytics);
-  const totalStreams = useTotalStreams(musicAnalytics);
+  const totalFollowers = socialAnalytics.reduce((sum, p) => sum + p.followers, 0);
+  const totalStreams = musicAnalytics.reduce((sum, p) => sum + p.totalStreams, 0);
 
   return (
     <section className="relative">

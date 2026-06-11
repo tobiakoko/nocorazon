@@ -8,39 +8,12 @@ export interface SocialLink {
   label?: string;
 }
 
-export interface StatCardData {
-  id: string;
-  title: string;
-  value: string;
-  subtext: string;
-  icon?: LucideIcon;
-  accentColor?: string;
-}
-
-export interface DetailedStatData {
-  label: string;
-  value: string;
-  change?: string;
-  isPositive?: boolean;
-}
-
-export interface MusicPlatform {
-  name: string;
-  url: string;
-  icon: LucideIcon;
-}
+// Where API data ultimately came from
+export type DataSource = 'api' | 'cache' | 'fallback';
 
 // Platform Analytics Types (API-ready)
 export type SocialPlatform = 'instagram' | 'tiktok' | 'twitter' | 'youtube';
 export type MusicStreamingPlatform = 'spotify' | 'appleMusic' | 'youtubeMusic';
-
-export interface PlatformMetric {
-  label: string;
-  value: number;
-  format: 'number' | 'percentage' | 'abbreviated';
-  trend?: 'up' | 'down' | 'stable';
-  trendValue?: number;
-}
 
 export interface PlatformAnalytics {
   platform: SocialPlatform;
@@ -96,21 +69,6 @@ export interface Show {
   isHeadliner: boolean;
   festivalName?: string;
   imageUrl?: string;
-}
-
-// Analytics State (for API readiness)
-export interface AnalyticsState<T> {
-  data: T | null;
-  isLoading: boolean;
-  error: string | null;
-}
-
-// API Response Types
-export interface ApiResponse<T> {
-  data: T;
-  source: 'api' | 'cache' | 'fallback';
-  timestamp: number;
-  isStale?: boolean;
 }
 
 // Spotify API Response Types
@@ -187,13 +145,13 @@ export interface YouTubeChannelResponse {
 export interface AnalyticsApiResponse {
   social: PlatformAnalytics[];
   music: MusicAnalytics[];
-  source: 'api' | 'cache' | 'fallback';
+  source: DataSource;
   timestamp: number;
 }
 
 // Tracks API Response
 export interface TracksApiResponse {
   tracks: Track[];
-  source: 'api' | 'cache' | 'fallback';
+  source: DataSource;
   timestamp: number;
 }

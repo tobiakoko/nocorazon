@@ -28,17 +28,21 @@ function transformSpotifyTrack(spotifyTrack: SpotifyTrack, index: number): Track
   };
 }
 
+function fallbackResponse(timestamp: number) {
+  const response: TracksApiResponse = {
+    tracks: TRACKS,
+    source: 'fallback',
+    timestamp,
+  };
+  return NextResponse.json(response);
+}
+
 export async function GET() {
   const timestamp = Date.now();
 
   // If Spotify isn't configured, return fallback immediately
   if (!isSpotifyConfigured()) {
-    const response: TracksApiResponse = {
-      tracks: TRACKS,
-      source: 'fallback',
-      timestamp,
-    };
-    return NextResponse.json(response);
+    return fallbackResponse(timestamp);
   }
 
   try {
@@ -49,20 +53,11 @@ export async function GET() {
       [] // Empty array as fallback for fetcher
     );
 
-    // If no tracks from Spotify, return fallback
     if (!spotifyTracks || spotifyTracks.length === 0) {
-      const response: TracksApiResponse = {
-        tracks: TRACKS,
-        source: 'fallback',
-        timestamp,
-      };
-      return NextResponse.json(response);
+      return fallbackResponse(timestamp);
     }
 
-    // Transform Spotify tracks to our format
-    const tracks: Track[] = spotifyTracks.map((track, index) =>
-      transformSpotifyTrack(track, index)
-    );
+    const tracks: Track[] = spotifyTracks.map(transformSpotifyTrack);
 
     const response: TracksApiResponse = {
       tracks,
@@ -73,13 +68,6 @@ export async function GET() {
     return NextResponse.json(response);
   } catch (error) {
     console.error('Tracks fetch error:', error);
-
-    // Return fallback on error
-    const response: TracksApiResponse = {
-      tracks: TRACKS,
-      source: 'fallback',
-      timestamp,
-    };
-    return NextResponse.json(response);
+    return fallbackResponse(timestamp);
   }
 }

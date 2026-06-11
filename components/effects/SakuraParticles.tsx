@@ -87,12 +87,16 @@ export default function SakuraParticles() {
     if (prefersReducedMotion || checkMobile()) return;
 
     // Periodic wind gusts (desktop only)
+    let gustTimeout: ReturnType<typeof setTimeout>;
     const windInterval = setInterval(() => {
       setWindIntensity(Math.random() * 30 + 10);
-      setTimeout(() => setWindIntensity(0), 2000);
+      gustTimeout = setTimeout(() => setWindIntensity(0), 2000);
     }, 8000);
 
-    return () => clearInterval(windInterval);
+    return () => {
+      clearInterval(windInterval);
+      clearTimeout(gustTimeout);
+    };
   }, []);
 
   // Reduce particle count on mobile

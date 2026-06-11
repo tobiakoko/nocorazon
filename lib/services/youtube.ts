@@ -35,32 +35,6 @@ export async function getChannelStats(
   return data.items[0];
 }
 
-// Get subscriber count as number
-export async function getSubscriberCount(
-  channelId: string = YOUTUBE_CHANNEL_ID
-): Promise<number> {
-  const channel = await getChannelStats(channelId);
-
-  if (!channel || channel.statistics.hiddenSubscriberCount) {
-    return 0;
-  }
-
-  return parseInt(channel.statistics.subscriberCount, 10);
-}
-
-// Get total view count as number
-export async function getTotalViews(
-  channelId: string = YOUTUBE_CHANNEL_ID
-): Promise<number> {
-  const channel = await getChannelStats(channelId);
-
-  if (!channel) {
-    return 0;
-  }
-
-  return parseInt(channel.statistics.viewCount, 10);
-}
-
 // Check if YouTube API key is configured
 export function isYouTubeConfigured(): boolean {
   return !!process.env.YOUTUBE_API_KEY;

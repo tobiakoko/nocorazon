@@ -34,8 +34,6 @@ export default function MusicShowcase() {
     );
   }
 
-  const latestTrack = featuredTrack;
-
   return (
     <section className="relative py-20 overflow-hidden">
       {/* Background Decor: A subtle grid to give it structure */}
@@ -82,7 +80,7 @@ export default function MusicShowcase() {
               {/* Background Blur Image for Atmosphere - Hidden on mobile for performance */}
               <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay hidden md:block">
                  <Image
-                  src={latestTrack.albumArt}
+                  src={featuredTrack.albumArt}
                   alt="Atmosphere"
                   fill
                   className="object-cover blur-3xl scale-110"
@@ -95,8 +93,8 @@ export default function MusicShowcase() {
                 <div className="lg:col-span-5 flex flex-col gap-6">
                   <div className="relative aspect-square w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:border-brand-pink/50 transition-colors duration-500">
                     <Image
-                      src={latestTrack.albumArt}
-                      alt={latestTrack.title}
+                      src={featuredTrack.albumArt}
+                      alt={featuredTrack.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
@@ -126,11 +124,11 @@ export default function MusicShowcase() {
 
                     <div>
                       <h3 className="font-display text-4xl md:text-6xl font-bold leading-[0.9] mb-2 text-white">
-                        {latestTrack.title}
+                        {featuredTrack.title}
                       </h3>
-                      {latestTrack.titleJapanese && (
+                      {featuredTrack.titleJapanese && (
                         <p className="font-sans text-xl md:text-2xl font-light text-white/60 tracking-widest">
-                          {latestTrack.titleJapanese}
+                          {featuredTrack.titleJapanese}
                         </p>
                       )}
                     </div>
@@ -164,12 +162,17 @@ export default function MusicShowcase() {
 
                   {/* Action Row */}
                   <div className="flex items-center gap-4 mt-6">
-                    <button className="group flex items-center gap-2 text-xs font-mono tracking-widest text-white/50 hover:text-brand-pink transition-colors">
+                    <a
+                        href={featuredTrack.spotifyUrl ?? `https://open.spotify.com/artist/${ARTIST_IDS.spotify}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center gap-2 text-xs font-mono tracking-widest text-white/50 hover:text-brand-pink transition-colors"
+                    >
                         VIEW ON SPOTIFY <ExternalLink className="w-3 h-3 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
+                    </a>
                     <span className="text-white/20 text-xs font-mono">|</span>
                     <span className="text-white/50 text-xs font-mono">
-                        RELEASED: {new Date(latestTrack.releaseDate).toLocaleDateString("en-US", { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                        RELEASED: {new Date(featuredTrack.releaseDate).toLocaleDateString("en-US", { year: 'numeric', month: '2-digit', day: '2-digit' })}
                     </span>
                   </div>
 

@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { NAV_SOCIALS, MUSIC_PLATFORMS } from "@/lib/constants";
-import { Disc, Menu, X } from "lucide-react"; // Added Disc for a generic music icon if needed
+import { Disc, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils"; // Assuming you have a clsx/tailwind-merge utility, if not standard template literals work
+import { cn } from "@/lib/utils";
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -51,9 +51,11 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* MOBILE TOGGLE (Visible only on small screens) */}
-          <button 
+          <button
             className="md:hidden text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
@@ -87,6 +89,7 @@ const Navbar: React.FC = () => {
                     href={platform.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={platform.name}
                     className="text-xs font-bold tracking-widest hover:text-brand-pink transition-colors uppercase relative group"
                 >
                     {platform.icon && <platform.icon size={20} className="inline-block mr-1" />}
@@ -106,7 +109,15 @@ const Navbar: React.FC = () => {
             <p className="text-brand-pink font-mono text-xs tracking-widest mb-4">SOCIALS</p>
             <div className="flex gap-6">
                 {NAV_SOCIALS.map((social) => (
-                    <a key={social.name} href={social.url} className="p-4 bg-white/5 rounded-full hover:bg-white/10">
+                    <a
+                        key={social.name}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={social.name}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="p-4 bg-white/5 rounded-full hover:bg-white/10"
+                    >
                         {social.icon && <social.icon size={24} />}
                     </a>
                 ))}
@@ -118,9 +129,12 @@ const Navbar: React.FC = () => {
         <div className="flex flex-col items-center gap-6">
             <p className="text-brand-pink font-mono text-xs tracking-widest mb-4">LISTEN ON</p>
             {MUSIC_PLATFORMS.map((platform) => (
-                <a 
-                    key={platform.name} 
+                <a
+                    key={platform.name}
                     href={platform.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
                     className="text-2xl font-display font-bold tracking-tighter uppercase"
                 >
                     {platform.label}
